@@ -7,14 +7,14 @@ interface AuthContextType {
   logout: () => void;
 }
 export const AuthContext = createContext<AuthContextType>({} as AuthContextType);
-export const AuthProvider: React.FC<{children:any}> = ({ children }) => {
+export const AuthProvider: React.FC<{ children: any }> = ({ children }) => {
   const [token, setToken] = useState<string | null>(() => localStorage.getItem('token'));
   const [store, setStore] = useState<any>(() => localStorage.getItem('store') ? JSON.parse(localStorage.getItem('store')!) : null);
   useEffect(() => {
     if (token) api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
     else delete api.defaults.headers.common['Authorization'];
   }, [token]);
-  const login = async (email:string, password:string) => {
+  const login = async (email: string, password: string) => {
     const res = await api.post('/login.php', { email, password });
     const { token, store } = res.data;
     setToken(token);

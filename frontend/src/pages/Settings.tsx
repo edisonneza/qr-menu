@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import api from '../api/axios';
 import { TextField, Button } from '@mui/material';
-import QRCodeGenerator from '../components/QRCodeGenerator';
+// import QRCodeGenerator from '../components/QRCodeGenerator';
 export default function Settings(){
   const [store, setStore] = useState<any>(null);
   const [name, setName] = useState('');
@@ -18,7 +18,7 @@ export default function Settings(){
         <TextField label='Phone (WhatsApp)' value={phone} onChange={e=>setPhone(e.target.value)} sx={{mb:2}} fullWidth/>
         <Button onClick={save} variant='contained'>Save</Button>
       </div>
-      {qrUrl && <div style={{marginTop:20}}><h4>Menu QR</h4><QRCodeGenerator url={qrUrl} /></div>}
+      {/* {qrUrl && <div style={{marginTop:20}}><h4>Menu QR</h4><QRCodeGenerator url={qrUrl} /></div>} */}
     </div>
   );
 }
