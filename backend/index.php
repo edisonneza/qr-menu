@@ -28,6 +28,10 @@ $router->add("GET", "/api/tenants/{slug}", function($params) {
     require __DIR__ . "/api/tenant.php";
 });
 
+$router->add("PUT", "/api/tenants", function() {
+    require __DIR__ . "/api/tenant.php";
+});
+
 // ------------------------------------------------
 // CATEGORIES
 // ------------------------------------------------
