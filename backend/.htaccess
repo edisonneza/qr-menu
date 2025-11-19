@@ -1,0 +1,8 @@
+RewriteEngine On
+
+# Allow direct access to files/folders (images, css, js...)
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Route all requests to index.php
+RewriteRule ^(.*)$ index.php [QSA,L]
