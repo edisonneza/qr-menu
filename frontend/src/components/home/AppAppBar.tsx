@@ -41,7 +41,7 @@ export default function AppAppBar() {
   const nav = useNavigate();
   return (
     <AppBar
-      position="fixed"
+      position="sticky"
       enableColorOnDark
       sx={{
         boxShadow: 0,
@@ -55,24 +55,24 @@ export default function AppAppBar() {
           <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', px: 0 }}>
             <Sitemark />
             <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-              <Button variant="text" color="info" size="small">
+              <Button variant="text" color="info" size="small" href="#features">
                 Features
               </Button>
-              <Button variant="text" color="info" size="small">
+              <Button variant="text" color="info" size="small" href="#testimonials">
                 Testimonials
               </Button>
-              <Button variant="text" color="info" size="small">
+              <Button variant="text" color="info" size="small" href="#highlights">
                 Highlights
               </Button>
-              <Button variant="text" color="info" size="small">
+              <Button variant="text" color="info" size="small" href="#pricing">
                 Pricing
               </Button>
-              <Button variant="text" color="info" size="small" sx={{ minWidth: 0 }}>
+              <Button variant="text" color="info" size="small" sx={{ minWidth: 0 }} href="#faq">
                 FAQ
               </Button>
-              <Button variant="text" color="info" size="small" sx={{ minWidth: 0 }}>
+              {/* <Button variant="text" color="info" size="small" sx={{ minWidth: 0 }} href="#blog">
                 Blog
-              </Button>
+              </Button> */}
             </Box>
           </Box>
           <Box
@@ -117,12 +117,12 @@ export default function AppAppBar() {
                   </IconButton>
                 </Box>
 
-                <MenuItem>Features</MenuItem>
-                <MenuItem>Testimonials</MenuItem>
-                <MenuItem>Highlights</MenuItem>
-                <MenuItem>Pricing</MenuItem>
-                <MenuItem>FAQ</MenuItem>
-                <MenuItem>Blog</MenuItem>
+                <MenuItem href="#features">Features</MenuItem>
+                <MenuItem href="#testimonials">Testimonials</MenuItem>
+                <MenuItem href="#highlights">Highlights</MenuItem>
+                <MenuItem href="#pricing">Pricing</MenuItem>
+                <MenuItem href="#faq">FAQ</MenuItem>
+                {/* <MenuItem href="#blog">Blog</MenuItem> */}
                 <Divider sx={{ my: 3 }} />
                 <MenuItem>
                   <Button color="primary" variant="contained" fullWidth onClick={() => nav('/register')}>
