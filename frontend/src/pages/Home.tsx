@@ -1,6 +1,6 @@
 import React from 'react';
 import { Container, Button, Typography, CssBaseline } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 import Divider from '@mui/material/Divider';
 import AppTheme from '../theme/AppTheme';
@@ -13,6 +13,7 @@ import Features from '../components/home/Features';
 import Testimonials from '../components/home/Testimonials';
 import FAQ from '../components/home/FAQ';
 import Footer from '../components/home/Footer';
+import TenantProducts from '../components/tenant/TenantProducts';
 
 export default function Home(props: { disableCustomTheme?: boolean }) {
   // return (
@@ -23,6 +24,16 @@ export default function Home(props: { disableCustomTheme?: boolean }) {
   //     <Button component={Link} to="/pricing" variant="outlined">Pricing</Button>
   //   </Container>
   // );
+  const { slug } = useParams();
+  if (!!slug && slug?.trim() != '') {
+    return (<AppTheme {...props}>
+      <CssBaseline enableColorScheme />
+      <AppAppBar />
+      <TenantProducts slug={slug} />
+      <Footer />
+    </AppTheme>
+    )
+  }
 
   return (<AppTheme {...props}>
     <CssBaseline enableColorScheme />
