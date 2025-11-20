@@ -89,7 +89,7 @@ export default function SignInCard() {
 
   return (
     <Card variant="outlined">
-      <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
+      <Box sx={{ display: { xs: 'flex', md: 'none' } }} onClick={() => nav('/')}>
         <SitemarkIcon />
       </Box>
       <Typography
@@ -162,7 +162,7 @@ export default function SignInCard() {
           Don&apos;t have an account?{' '}
           <span>
             <Link
-              href="/material-ui/getting-started/templates/sign-in/"
+              onClick={() => nav('/register')}
               variant="body2"
               sx={{ alignSelf: 'center' }}
             >
@@ -171,6 +171,15 @@ export default function SignInCard() {
           </span>
         </Typography>
       </Box>
+      <Divider>or</Divider>
+      <Button
+              onClick={() => nav('/')}
+              type="button"
+
+              sx={{ alignSelf: 'center' }}
+            >
+              Go to Homepage
+            </Button>
       <Divider>or</Divider>
       <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
         <Button
