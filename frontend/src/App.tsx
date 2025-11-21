@@ -5,6 +5,7 @@ import Register from './pages/Register';
 import MenuPublic from './pages/MenuPublic';
 import Dashboard from './pages/Dashboard';
 import ProtectedRoute from './components/ProtectedRoute';
+import Products from './pages/admin/Products';
 
 export default function App() {
   return (
@@ -15,6 +16,7 @@ export default function App() {
       <Route path='/register' element={<Register />} />
       <Route path='/menu/:slug' element={<MenuPublic />} />
       <Route path='/admin/dashboard/*' element={<ProtectedRoute children={<Dashboard />} />} />
+      <Route path='/admin/products/*' element={<ProtectedRoute children={<Products />} />} />
     </Routes>
   );
 }

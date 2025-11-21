@@ -1,13 +1,13 @@
 import { Routes, Route, Link, Navigate } from 'react-router-dom';
-import Categories from './Categories';
-import Products from './Products';
-import Settings from './Settings';
-import { useAuth } from '../hooks/useAuth';
-import AppTheme from '../theme/AppTheme';
+// import Categories from '.,/Categories';
+import Products from '../Products';
+import Settings from '../Settings';
+import { useAuth } from '../../hooks/useAuth';
+import AppTheme from '../../theme/AppTheme';
 import { alpha, Box, CssBaseline, Stack } from '@mui/material';
-import SideMenu from '../components/admin/SideMenu';
-import AppNavbar from '../components/admin/AppNavBar';
-import Header from '../components/admin/Header';
+import SideMenu from '../../components/admin/SideMenu';
+import AppNavbar from '../../components/admin/AppNavBar';
+import Header from '../../components/admin/Header';
 
 
 export default function Dashboard(props: { disableCustomTheme?: boolean }) {
@@ -69,7 +69,7 @@ export default function Dashboard(props: { disableCustomTheme?: boolean }) {
               mt: { xs: 8, md: 0 },
             }}
           >
-            <Header page='Home'/>
+            <Header page='Products'/>
             {/* <MainGrid /> */}
           </Stack>
         </Box>

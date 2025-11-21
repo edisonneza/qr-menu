@@ -11,12 +11,14 @@ import AssignmentRoundedIcon from '@mui/icons-material/AssignmentRounded';
 import SettingsRoundedIcon from '@mui/icons-material/SettingsRounded';
 import InfoRoundedIcon from '@mui/icons-material/InfoRounded';
 import HelpRoundedIcon from '@mui/icons-material/HelpRounded';
+import { useNavigate } from 'react-router-dom';
+import React from 'react';
 
 const mainListItems = [
-  { text: 'Home', icon: <HomeRoundedIcon /> },
-  { text: 'Analytics', icon: <AnalyticsRoundedIcon /> },
-  { text: 'Clients', icon: <PeopleRoundedIcon /> },
-  { text: 'Tasks', icon: <AssignmentRoundedIcon /> },
+  { text: 'Home', icon: <HomeRoundedIcon />, route: '/admin/dashboard', index: 0 },
+  { text: 'Products', icon: <AnalyticsRoundedIcon />, route: '/admin/products', index: 1 },
+  { text: 'Categories', icon: <PeopleRoundedIcon />, route: '/admin/categories', index: 2 },
+  { text: 'Orders', icon: <AssignmentRoundedIcon />, route: '/admin/orders', index: 3 },
 ];
 
 const secondaryListItems = [
@@ -26,12 +28,18 @@ const secondaryListItems = [
 ];
 
 export default function MenuContent() {
+  const [selectedIndex, setSelectedIndex] = React.useState(0);
+  const nav = useNavigate();
+
   return (
     <Stack sx={{ flexGrow: 1, p: 1, justifyContent: 'space-between' }}>
       <List dense>
         {mainListItems.map((item, index) => (
           <ListItem key={index} disablePadding sx={{ display: 'block' }}>
-            <ListItemButton selected={index === 0}>
+            <ListItemButton selected={index === selectedIndex} onClick={() => {
+              setSelectedIndex(item.index);
+              nav(item.route);
+            }}>
               <ListItemIcon>{item.icon}</ListItemIcon>
               <ListItemText primary={item.text} />
             </ListItemButton>
