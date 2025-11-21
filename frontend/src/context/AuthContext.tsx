@@ -1,5 +1,6 @@
 import React, { createContext, useEffect, useState } from 'react';
 import api from '../api/axios';
+import { log } from 'console';
 interface AuthContextType {
   token: string | null;
   user: any | null;
@@ -14,6 +15,12 @@ export const AuthProvider: React.FC<{ children: any }> = ({ children }) => {
     if (token) api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
     else delete api.defaults.headers.common['Authorization'];
   }, [token]);
+
+  useEffect(() => {
+    if (!user) {
+      logout();
+    }
+  }, [user]);
   const login = async (email: string, password: string) => {
     const res = await api.post('/login.php', { email, password });
     const { token, user } = res.data.data;
