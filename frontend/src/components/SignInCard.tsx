@@ -56,7 +56,7 @@ export default function SignInCard() {
   const onSubmit = async (data:any) => {
     if (!validateInputs()) return;
 
-    try { await auth.login(data.email, data.password); nav('/dashboard'); }
+    try { await auth.login(data.email, data.password); nav('/admin/dashboard'); }
     catch(e){ alert('Login failed'); }
   }
 

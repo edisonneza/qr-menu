@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Container, Button, Typography, CssBaseline } from '@mui/material';
 import { Link, useParams } from 'react-router-dom';
 
@@ -14,6 +14,7 @@ import Testimonials from '../components/home/Testimonials';
 import FAQ from '../components/home/FAQ';
 import Footer from '../components/home/Footer';
 import TenantProducts from '../components/tenant/TenantProducts';
+import { useAuth } from '../hooks/useAuth';
 
 export default function Home(props: { disableCustomTheme?: boolean }) {
   // return (

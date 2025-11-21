@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import api from '../api/axios';
 import { Link, TextField, Button, CssBaseline, styled, Stack, Typography, Box, FormControl, FormLabel, FormControlLabel, Checkbox, Divider } from '@mui/material';
@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import AppTheme from '../theme/AppTheme';
 import ColorModeSelect from '../theme/ColorModeSelect';
 import { FacebookIcon, GoogleIcon, SitemarkIcon } from '../components/CustomIcons';
+import { useAuth } from '../hooks/useAuth';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -52,6 +53,7 @@ const SignUpContainer = styled(Stack)(({ theme }) => ({
 
 export default function Register(props: { disableCustomTheme?: boolean }) {
   const { register, handleSubmit } = useForm();
+  const auth = useAuth();
   const nav = useNavigate();
   const onSubmit = async (data: any) => {
     try {
@@ -60,9 +62,15 @@ export default function Register(props: { disableCustomTheme?: boolean }) {
       if (!res.data.data.token || !res.data.data.user) { throw new Error('Invalid response'); }
       localStorage.setItem('token', res.data.data.token);
       localStorage.setItem('store', JSON.stringify(res.data.data.user));
-      nav('/dashboard');
+      nav('/admin/dashboard');
     } catch (e) { alert('Registration failed'); }
   }
+
+  useEffect(() => {
+      if (auth.token)
+        return nav('/admin/dashboard');
+  
+    }, [auth.token]);
   // return (
   //   <Container>
   //     <h2>Register</h2>

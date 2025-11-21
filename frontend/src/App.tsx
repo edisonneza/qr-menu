@@ -14,7 +14,7 @@ export default function App() {
       <Route path='/login' element={<Login />} />
       <Route path='/register' element={<Register />} />
       <Route path='/menu/:slug' element={<MenuPublic />} />
-      <Route path='/dashboard/*' element={<ProtectedRoute children={<Dashboard />} />} />
+      <Route path='/admin/dashboard/*' element={<ProtectedRoute children={<Dashboard />} />} />
     </Routes>
   );
 }

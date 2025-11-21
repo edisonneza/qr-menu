@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useAuth } from '../hooks/useAuth';
 import { TextField, Button, Container, CssBaseline } from '@mui/material';
@@ -10,10 +10,10 @@ import SignInCard from '../components/SignInCard';
 import Content from '../components/Content';
 
 
-export default function Login(props: { disableCustomTheme?: boolean }){
+export default function Login(props: { disableCustomTheme?: boolean }) {
   // const { register, handleSubmit } = useForm();
-  // const auth = useAuth();
-  // const nav = useNavigate();
+  const auth = useAuth();
+  const nav = useNavigate();
   // const onSubmit = async (data:any) => {
   //   try { await auth.login(data.email, data.password); nav('/dashboard'); }
   //   catch(e){ alert('Login failed'); }
@@ -28,6 +28,13 @@ export default function Login(props: { disableCustomTheme?: boolean }){
   //     </form>
   //   </Container>
   // );
+
+  useEffect(() => {
+    if (auth.token)
+      return nav('/admin/dashboard');
+
+  }, [auth.token]);
+
 
   return (
     <AppTheme {...props}>

@@ -14,6 +14,7 @@ import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import ColorModeIconDropdown from '../../theme/ColorModeIconDropdown';
 import Sitemark from './SitemarkIcon';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../hooks/useAuth';
 
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   display: 'flex',
@@ -33,6 +34,15 @@ const StyledToolbar = styled(Toolbar)(({ theme }) => ({
 
 export default function AppAppBar() {
   const [open, setOpen] = React.useState(false);
+
+  const auth = useAuth();
+  const [isSigned, setIsSigned] = React.useState(!!auth.token);
+
+  React.useEffect(() => {
+    if (!auth.token)
+      setIsSigned(false);
+
+  }, [auth.token]);
 
   const toggleDrawer = (newOpen: boolean) => () => {
     setOpen(newOpen);
@@ -82,12 +92,20 @@ export default function AppAppBar() {
               alignItems: 'center',
             }}
           >
-            <Button color="primary" variant="text" size="small" onClick={() => nav('/login')}>
-              Sign in
-            </Button>
-            <Button color="primary" variant="contained" size="small" onClick={() => nav('/register')}>
-              Sign up
-            </Button>
+            {!isSigned ? (
+              <>
+                <Button color="primary" variant="text" size="small" onClick={() => nav('/login')}>
+                  Sign in
+                </Button>
+                <Button color="primary" variant="contained" size="small" onClick={() => nav('/register')}>
+                  Sign up
+                </Button>
+              </>
+            ) : (
+              <Button color="primary" variant="text" size="small" onClick={() => nav('/admin/dashboard')}>
+                Dashboard
+              </Button>
+            )}
             <ColorModeIconDropdown />
           </Box>
           <Box sx={{ display: { xs: 'flex', md: 'none' }, gap: 1 }}>
@@ -124,16 +142,26 @@ export default function AppAppBar() {
                 <MenuItem href="#faq">FAQ</MenuItem>
                 {/* <MenuItem href="#blog">Blog</MenuItem> */}
                 <Divider sx={{ my: 3 }} />
-                <MenuItem>
-                  <Button color="primary" variant="contained" fullWidth onClick={() => nav('/register')}>
-                    Sign up
-                  </Button>
-                </MenuItem>
-                <MenuItem>
-                  <Button color="primary" variant="outlined" fullWidth onClick={() => nav('/login')}>
-                    Sign in
-                  </Button>
-                </MenuItem>
+                {!isSigned ? (
+                  <>
+                    <MenuItem>
+                      <Button color="primary" variant="contained" fullWidth onClick={() => nav('/register')}>
+                        Sign up
+                      </Button>
+                    </MenuItem>
+                    <MenuItem>
+                      <Button color="primary" variant="outlined" fullWidth onClick={() => nav('/login')}>
+                        Sign in
+                      </Button>
+                    </MenuItem>
+                  </>
+                ) : (
+                  <MenuItem>
+                    <Button color="primary" variant="contained" fullWidth onClick={() => nav('/admin/dashboard')}>
+                      Dashboard
+                    </Button>
+                  </MenuItem>
+                )}
               </Box>
             </Drawer>
           </Box>
