@@ -1,16 +1,17 @@
 import React, { createContext, useEffect, useState } from 'react';
 import api from '../api/axios';
 import { log } from 'console';
+import { User } from '../models/User';
 interface AuthContextType {
   token: string | null;
-  user: any | null;
+  user: User | null;
   login: (email: string, password: string) => Promise<any>;
   logout: () => void;
 }
 export const AuthContext = createContext<AuthContextType>({} as AuthContextType);
 export const AuthProvider: React.FC<{ children: any }> = ({ children }) => {
   const [token, setToken] = useState<string | null>(() => localStorage.getItem('token'));
-  const [user, setUser] = useState<any>(() => localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')!) : null);
+  const [user, setUser] = useState<User | null>(() => localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')!) : null);
   useEffect(() => {
     if (token) api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
     else delete api.defaults.headers.common['Authorization'];

@@ -12,7 +12,7 @@ use App\Auth\JwtAuth;
 $payload = getJsonPayload();
 
 try {
-    requireFields($payload, ['tenant_name','slug','email','password']);
+    requireFields($payload, ['tenant_name', 'slug', 'email', 'password']);
     if (!filter_var($payload['email'], FILTER_VALIDATE_EMAIL)) throw new InvalidArgumentException('Invalid email');
 
     $pdo = App\Services\DB::getPDO($config);
@@ -20,8 +20,8 @@ try {
     $userSvc = new UserService($pdo);
 
     // uniqueness checks
-    if ($tenantSvc->findBySlug($payload['slug'])) jsonSend(['success'=>false,'error'=>'Slug already exists'], 400);
-    if ($userSvc->findByEmail($payload['email'])) jsonSend(['success'=>false,'error'=>'Email already registered'], 400);
+    if ($tenantSvc->findBySlug($payload['slug'])) jsonSend(['success' => false, 'error' => 'Slug already exists'], 400);
+    if ($userSvc->findByEmail($payload['email'])) jsonSend(['success' => false, 'error' => 'Email already registered'], 400);
 
     $pdo->beginTransaction();
     $tenantId = $tenantSvc->createTenant($payload['tenant_name'], $payload['slug'], $payload['email']);
@@ -31,13 +31,13 @@ try {
 
     // create token
     $jwt = new JwtAuth($config['jwt_secret'], $config['jwt_issuer'] ?? '');
-    $token = $jwt->createToken(['user_id'=>$userId, 'tenant_id'=>$tenantId, 'email'=>$payload['email']]);
+    $token = $jwt->createToken(['user_id' => $userId, 'tenant_id' => $tenantId, 'email' => $payload['email']]);
 
-    jsonSend(['success'=>true, 'data'=>['token'=>$token,'user'=>['id'=>$userId,'tenant_id'=>$tenantId,'email'=>$payload['email']]]]);
+    jsonSend(['success' => true, 'data' => ['token' => $token, 'user' => ['id' => $userId, 'name' => $payload['tenant_name'], 'tenant_id' => $tenantId, 'email' => $payload['email']]]]);
 } catch (InvalidArgumentException $e) {
     if (isset($pdo) && $pdo->inTransaction()) $pdo->rollBack();
-    jsonSend(['success'=>false,'error'=>$e->getMessage()], 400);
+    jsonSend(['success' => false, 'error' => $e->getMessage()], 400);
 } catch (Exception $ex) {
     if (isset($pdo) && $pdo->inTransaction()) $pdo->rollBack();
-    jsonSend(['success'=>false,'error'=>$ex->getMessage()], 500);
+    jsonSend(['success' => false, 'error' => $ex->getMessage()], 500);
 }

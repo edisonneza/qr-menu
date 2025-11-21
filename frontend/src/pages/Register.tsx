@@ -56,21 +56,31 @@ export default function Register(props: { disableCustomTheme?: boolean }) {
   const auth = useAuth();
   const nav = useNavigate();
   const onSubmit = async (data: any) => {
+    if (!validateInputs()) return;
     try {
       const res = await api.post('/register.php', data);
-      debugger;
+
+      // debugger;
+      // if (!res.data.data.success)
+      //   throw new Error(res.data.data.message || 'Registration failed');
+
       if (!res.data.data.token || !res.data.data.user) { throw new Error('Invalid response'); }
       localStorage.setItem('token', res.data.data.token);
-      localStorage.setItem('store', JSON.stringify(res.data.data.user));
+      localStorage.setItem('user', JSON.stringify(res.data.data.user));
       nav('/admin/dashboard');
-    } catch (e) { alert('Registration failed'); }
+    } catch (e: any) {
+      if (e.response && e.response.data && e.response.data.error) {
+        alert(`Registration failed: ${e.response.data.error}`);
+      } else
+        alert('Registration failed');
+    }
   }
 
   useEffect(() => {
-      if (auth.token)
-        return nav('/admin/dashboard');
-  
-    }, [auth.token]);
+    if (auth.token)
+      return nav('/admin/dashboard');
+
+  }, [auth.token]);
   // return (
   //   <Container>
   //     <h2>Register</h2>
@@ -90,11 +100,14 @@ export default function Register(props: { disableCustomTheme?: boolean }) {
   const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('');
   const [nameError, setNameError] = React.useState(false);
   const [nameErrorMessage, setNameErrorMessage] = React.useState('');
+  const [slugError, setSlugError] = React.useState(false);
+  const [slugErrorMessage, setSlugErrorMessage] = React.useState('');
 
   const validateInputs = () => {
     const email = document.getElementById('email') as HTMLInputElement;
     const password = document.getElementById('password') as HTMLInputElement;
     const name = document.getElementById('name') as HTMLInputElement;
+    const slug = document.getElementById('slug') as HTMLInputElement;
 
     let isValid = true;
 
@@ -116,6 +129,15 @@ export default function Register(props: { disableCustomTheme?: boolean }) {
       setPasswordErrorMessage('');
     }
 
+    if (!slug.value || slug.value.length < 4) {
+      setSlugError(true);
+      setSlugErrorMessage('Business slug must be at least 4 characters long.');
+      isValid = false;
+    } else {
+      setSlugError(false);
+      setSlugErrorMessage('');
+    }
+
     if (!name.value || name.value.length < 1) {
       setNameError(true);
       setNameErrorMessage('Name is required.');
@@ -135,7 +157,7 @@ export default function Register(props: { disableCustomTheme?: boolean }) {
       <SignUpContainer direction="column" justifyContent="space-between">
         <Card variant="outlined">
           <Box onClick={() => nav('/')} sx={{ cursor: 'pointer' }} >
-          <SitemarkIcon />
+            <SitemarkIcon />
           </Box>
           <Typography
             component="h1"
@@ -150,27 +172,41 @@ export default function Register(props: { disableCustomTheme?: boolean }) {
             sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}
           >
             <FormControl>
-              <FormLabel htmlFor="name">Full name</FormLabel>
+              <FormLabel htmlFor="name">Business Name</FormLabel>
               <TextField
+                {...register('tenant_name')}
                 autoComplete="name"
-                name="name"
                 required
                 fullWidth
                 id="name"
-                placeholder="Jon Snow"
+                placeholder="TechAlb Company"
                 error={nameError}
                 helperText={nameErrorMessage}
                 color={nameError ? 'error' : 'primary'}
               />
             </FormControl>
             <FormControl>
+              <FormLabel htmlFor="name">Business slug</FormLabel>
+              <TextField
+                {...register('slug')}
+                autoComplete="name"
+                required
+                fullWidth
+                id="slug"
+                placeholder="techalb"
+                error={slugError}
+                helperText={slugErrorMessage}
+                color={slugError ? 'error' : 'primary'}
+              />
+            </FormControl>
+            <FormControl>
               <FormLabel htmlFor="email">Email</FormLabel>
               <TextField
+                {...register('email')}
                 required
                 fullWidth
                 id="email"
                 placeholder="your@email.com"
-                name="email"
                 autoComplete="email"
                 variant="outlined"
                 error={emailError}
@@ -181,9 +217,9 @@ export default function Register(props: { disableCustomTheme?: boolean }) {
             <FormControl>
               <FormLabel htmlFor="password">Password</FormLabel>
               <TextField
+                {...register('password')}
                 required
                 fullWidth
-                name="password"
                 placeholder="••••••"
                 type="password"
                 id="password"

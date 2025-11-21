@@ -30,7 +30,7 @@ export default function Login(props: { disableCustomTheme?: boolean }) {
   // );
 
   useEffect(() => {
-    if (auth.token)
+    if (auth.token && auth.user)
       return nav('/admin/dashboard');
 
   }, [auth.token]);
