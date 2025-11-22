@@ -10,31 +10,32 @@ import { styled } from '@mui/material/styles';
 import DevicesRoundedIcon from '@mui/icons-material/DevicesRounded';
 import EdgesensorHighRoundedIcon from '@mui/icons-material/EdgesensorHighRounded';
 import ViewQuiltRoundedIcon from '@mui/icons-material/ViewQuiltRounded';
+import { useTranslation } from 'react-i18next';
 
 const baseUrl = import.meta.env.TEMPLATE_IMAGE_URL || 'https://mui.com';
 
-const items = [
+const items = (t: any) => [
   {
     icon: <ViewQuiltRoundedIcon />,
-    title: 'Dashboard',
+    title: t('Dashboard'),
     description:
-      'This item could provide a snapshot of the most important metrics or data points related to the product.',
+      t('Get an overview of the most important metrics or data points related to the product. See how many users have checked the menu, popular items, other useful insights and much more.'),
     imageLight: `url("${baseUrl || 'https://mui.com'}/static/images/templates/templates-images/dash-light.png")`,
     imageDark: `url("${baseUrl || 'https://mui.com'}/static/images/templates/templates-images/dash-dark.png")`,
   },
   {
     icon: <EdgesensorHighRoundedIcon />,
-    title: 'Mobile integration',
+    title: t('Mobile integration'),
     description:
-      'This item could provide information about the mobile app version of the product.',
+      t('Everything is designed to be mobile-first. The user interface is optimized for smaller screens, ensuring that users have a seamless experience when accessing the product on their mobile devices.'),
     imageLight: `url("${baseUrl || 'https://mui.com'}/static/images/templates/templates-images/mobile-light.png")`,
     imageDark: `url("${baseUrl || 'https://mui.com'}/static/images/templates/templates-images/mobile-dark.png")`,
   },
   {
     icon: <DevicesRoundedIcon />,
-    title: 'Available on all platforms',
+    title: t('Available on all platforms'),
     description:
-      'This item could let users know the product is available on all platforms, such as web, mobile, and desktop.',
+      t('Using our product, it is available on all platforms, such as web, mobile, tablet and desktop. This ensures that users can access the product from any device, at any time.'),
     imageLight: `url("${baseUrl || 'https://mui.com'}/static/images/templates/templates-images/devices-light.png")`,
     imageDark: `url("${baseUrl || 'https://mui.com'}/static/images/templates/templates-images/devices-dark.png")`,
   },
@@ -68,14 +69,16 @@ interface MobileLayoutProps {
   selectedItemIndex: number;
   handleItemClick: (index: number) => void;
   selectedFeature: (typeof items)[0];
+  translate: any;
 }
 
 export function MobileLayout({
   selectedItemIndex,
   handleItemClick,
   selectedFeature,
+  translate
 }: MobileLayoutProps) {
-  if (!items[selectedItemIndex]) {
+  if (!items(translate)[selectedItemIndex]) {
     return null;
   }
 
@@ -88,7 +91,7 @@ export function MobileLayout({
       }}
     >
       <Box sx={{ display: 'flex', gap: 2, overflow: 'auto' }}>
-        {items.map(({ title }, index) => (
+        {items(translate).map(({ title }, index) => (
           <Chip
             size="medium"
             key={index}
@@ -111,10 +114,10 @@ export function MobileLayout({
             }),
           })}
           style={
-            items[selectedItemIndex]
+            items(translate)[selectedItemIndex]
               ? ({
-                  '--items-imageLight': items[selectedItemIndex].imageLight,
-                  '--items-imageDark': items[selectedItemIndex].imageDark,
+                  '--items-imageLight': items(translate)[selectedItemIndex].imageLight,
+                  '--items-imageDark': items(translate)[selectedItemIndex].imageDark,
                 } as any)
               : {}
           }
@@ -137,12 +140,13 @@ export function MobileLayout({
 
 export default function Features() {
   const [selectedItemIndex, setSelectedItemIndex] = React.useState(0);
+  const { t } = useTranslation();
 
   const handleItemClick = (index: number) => {
     setSelectedItemIndex(index);
   };
 
-  const selectedFeature = items[selectedItemIndex];
+  const selectedFeature = items(t)[selectedItemIndex];
 
   return (
     <Container id="features" sx={{ py: { xs: 8, sm: 16 } }}>
@@ -153,15 +157,13 @@ export default function Features() {
           gutterBottom
           sx={{ color: 'text.primary' }}
         >
-          Product features
+          {t('Product features')}
         </Typography>
         <Typography
           variant="body1"
           sx={{ color: 'text.secondary', mb: { xs: 2, sm: 4 } }}
         >
-          Provide a brief overview of the key features of the product. For example,
-          you could list the number of features, their types or benefits, and
-          add-ons.
+          {t('Create a digital menu for your Restaurant or Bar. Engage more with your customers.')}
         </Typography>
       </Box>
       <Box
@@ -180,7 +182,7 @@ export default function Features() {
               height: '100%',
             }}
           >
-            {items.map(({ icon, title, description }, index) => (
+            {items(t).map(({ icon, title, description }, index) => (
               <Box
                 key={index}
                 component={Button}
@@ -228,6 +230,7 @@ export default function Features() {
             selectedItemIndex={selectedItemIndex}
             handleItemClick={handleItemClick}
             selectedFeature={selectedFeature}
+            translate={t}
           />
         </div>
         <Box
@@ -258,10 +261,10 @@ export default function Features() {
                 }),
               })}
               style={
-                items[selectedItemIndex]
+                items(t)[selectedItemIndex]
                   ? ({
-                      '--items-imageLight': items[selectedItemIndex].imageLight,
-                      '--items-imageDark': items[selectedItemIndex].imageDark,
+                      '--items-imageLight': items(t)[selectedItemIndex].imageLight,
+                      '--items-imageDark': items(t)[selectedItemIndex].imageDark,
                     } as any)
                   : {}
               }

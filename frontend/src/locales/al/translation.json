@@ -11,7 +11,7 @@
     "FAQ": "FAQ",
     "Sign in": "Hyr",
     "Sign up": "Regjistrohu",
-    "Dashboard": "Paneli",
+    "Dashboard": "Paneli kontrollit",
     "Password": "Fjalëkalimi",
     "Forgot your password?": "Keni harruar fjalëkalimin?",
     "Sign in to your account": "Hyni në llogarinë tuaj",
@@ -28,6 +28,15 @@
     "Light": "I zbehtë",
     "Dark": "I errët",
     "System": "Sistemi",
+    "Product features": "Karakteristikat e produktit",
+    "Mobile integration": "Integrimi ne smartphone",
+    "Available on all platforms": "I disponueshëm në të gjitha platformat",
+    "Trusted by the best bars and restaurants worldwide": "I besuar nga lokalet dhe restorantet më të mira në mbarë botën",
+    "Get an overview of the most important metrics or data points related to the product. See how many users have checked the menu, popular items, other useful insights and much more.": "Merrni një pasqyrë të statistikave ose të të dhënave më të rëndësishme në lidhje me produktin. Shihni sa përdorues kanë kontrolluar menunë, artikujt e njohur, njohuri të tjera të dobishme dhe shumë më tepër.",
+    "Everything is designed to be mobile-first. The user interface is optimized for smaller screens, ensuring that users have a seamless experience when accessing the product on their mobile devices.": "Gjithçka është projektuar për t'u përdorur së pari në celular. Ndërfaqja e përdoruesit është optimizuar për ekrane më të vegjël, duke siguruar që përdoruesit të kenë një përvojë të qetë kur hyjnë në produkt nga pajisjet e tyre mobile.",
+    "Using our product, it is available on all platforms, such as web, mobile, tablet and desktop. This ensures that users can access the product from any device, at any time.": "Duke përdorur produktin tonë, është i disponueshëm për ju në të gjitha platformat, si web, mobile, tablet dhe desktop. Kjo siguron që përdoruesit të kenë qasje në produkt nga çdo pajisje, në çdo kohë.",
+    "Fast setup": "Konfigurim i shpejtë",
+    "Create a digital menu for your Restaurant or Bar. Engage more with your customers.": "Krijoni një menu dixhitale për Restorantin ose Barin tuaj. Angazhohuni më shumë me klientët tuaj.",
     "Please enter a valid email address.": "Ju lutemi shkruani një adresë email-i të vlefshme.",
     "Password must be at least 5 characters long.": "Fjalëkalimi duhet të jetë të paktën 5 karaktere i gjatë.",
     "Adaptable performance": "Performancë e përshtatshme",
@@ -37,6 +46,8 @@
     "Great user experience": "Përvojë e shkëlqyer e përdoruesit",
     "Integrate our product into your routine with an intuitive and easy-to-use interface.": "Integroni produktin tonë në rutinën tuaj me një ndërfaqe intuitive dhe të lehtë për t'u përdorur.",
     "Innovative functionality": "Funksionalitet inovativ",
-    "Stay ahead with features that set new standards, addressing your evolving needs better than the rest.": "Qëndroni përpara me veçori që vendosin standarde të reja, duke adresuar nevojat tuaja në zhvillim më mirë se të tjerët."
-
+    "Stay ahead with features that set new standards, addressing your evolving needs better than the rest.": "Qëndroni përpara me veçori që vendosin standarde të reja, duke adresuar nevojat tuaja në zhvillim më mirë se të tjerët.",
+    "Your customer": "Kenaqësia e",
+    "satisfaction": "klientëve tuaj",
+    "Create your digital menu in minutes and enhance your customers experience with QR codes. Easy, fast and with a free plan! No credit card required.": "Krijoni menunë tuaj dixhitale në minuta dhe përmirësoni përvojën e klientëve tuaj me menunë QR code. E lehtë, e shpejtë dhe me një plan falas! Nuk ka nevojë për kartë krediti."
 }
