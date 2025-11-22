@@ -2,6 +2,7 @@ import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import Breadcrumbs, { breadcrumbsClasses } from '@mui/material/Breadcrumbs';
 import NavigateNextRoundedIcon from '@mui/icons-material/NavigateNextRounded';
+import { useUI } from '../../context/UIContext';
 
 const StyledBreadcrumbs = styled(Breadcrumbs)(({ theme }) => ({
   margin: theme.spacing(1, 0),
@@ -14,7 +15,9 @@ const StyledBreadcrumbs = styled(Breadcrumbs)(({ theme }) => ({
   },
 }));
 
-export default function NavbarBreadcrumbs(props: { page: string }) {
+export default function NavbarBreadcrumbs() {
+  const { pageTitle } = useUI();
+
   return (
     <StyledBreadcrumbs
       aria-label="breadcrumb"
@@ -22,7 +25,7 @@ export default function NavbarBreadcrumbs(props: { page: string }) {
     >
       <Typography variant="body1">Dashboard</Typography>
       <Typography variant="body1" sx={{ color: 'text.primary', fontWeight: 600 }}>
-        {props.page}
+        {pageTitle}
       </Typography>
     </StyledBreadcrumbs>
   );

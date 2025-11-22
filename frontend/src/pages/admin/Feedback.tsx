@@ -1,27 +1,24 @@
 import { Navigate } from 'react-router-dom';
-// import Categories from '.,/Categories';
 import { useAuth } from '../../hooks/useAuth';
 import { useUI } from '../../context/UIContext';
 import { useEffect } from 'react';
 
 
-export default function Products(props: { disableCustomTheme?: boolean }) {
+export default function Feedback(props: { disableCustomTheme?: boolean }) {
   const auth = useAuth();
   const { setPageTitle } = useUI();
 
   useEffect(() => {
-    setPageTitle('Products');
+    setPageTitle('Feedback');
   }, []);
 
   if (!auth.token) {
     return <Navigate to="/login" replace />;
   }
 
-
   return (
-    // <AppTheme {...props} themeComponents={xThemeComponents}>
     <>
-      <h1>Products Page - to be implemented</h1>
+      <h1>Feedback Page - to be implemented</h1>
     </>
   );
 }

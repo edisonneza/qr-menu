@@ -7,7 +7,7 @@ import MenuButton from './MenuButton';
 
 import Search from './Search';
 
-export default function Header(props: { page: string }) {
+export default function Header() {
     return (
         <Stack
             direction="row"
@@ -21,7 +21,7 @@ export default function Header(props: { page: string }) {
             }}
             spacing={2}
         >
-            <NavbarBreadcrumbs page={props.page} />
+            <NavbarBreadcrumbs/>
             <Stack direction="row" sx={{ gap: 1 }}>
                 <Search />
                 <CustomDatePicker />

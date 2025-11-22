@@ -115,7 +115,7 @@ export default function SignInCard() {
             name="email"
             placeholder="your@email.com"
             autoComplete="email"
-            autoFocus
+            // autoFocus
             required
             fullWidth
             variant="outlined"
@@ -143,7 +143,6 @@ export default function SignInCard() {
             type="password"
             id="password"
             autoComplete="current-password"
-            autoFocus
             required
             fullWidth
             variant="outlined"
