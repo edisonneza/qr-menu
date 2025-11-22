@@ -12,6 +12,7 @@ import Orders from './pages/admin/Orders';
 import Settings from './pages/Settings';
 import About from './pages/admin/About';
 import Feedback from './pages/admin/Feedback';
+import TermsAndConditions from './pages/TermsAndConditions';
 
 export default function App() {
   return (
@@ -21,6 +22,7 @@ export default function App() {
         <Route path='/:slug' element={<Home />} />
         <Route path='/login' element={<Login />} />
         <Route path='/register' element={<Register />} />
+        <Route path='/termsandconditions' element={<TermsAndConditions />} />
         <Route path='/menu/:slug' element={<MenuPublic />} />
 
         <Route path="/admin" element={<DashboardLayout />}>
