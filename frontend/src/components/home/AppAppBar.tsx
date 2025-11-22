@@ -65,19 +65,19 @@ export default function AppAppBar() {
           <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', px: 0 }}>
             <Sitemark />
             <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-              <Button variant="text" color="info" size="small" href="#features">
+              <Button variant="text" color="info" size="small" href="/#features">
                 Features
               </Button>
-              <Button variant="text" color="info" size="small" href="#testimonials">
+              <Button variant="text" color="info" size="small" href="/#testimonials">
                 Testimonials
               </Button>
-              <Button variant="text" color="info" size="small" href="#highlights">
+              <Button variant="text" color="info" size="small" href="/#highlights">
                 Highlights
               </Button>
-              <Button variant="text" color="info" size="small" href="#pricing">
+              <Button variant="text" color="info" size="small" href="/#pricing">
                 Pricing
               </Button>
-              <Button variant="text" color="info" size="small" sx={{ minWidth: 0 }} href="#faq">
+              <Button variant="text" color="info" size="small" sx={{ minWidth: 0 }} href="/#faq">
                 FAQ
               </Button>
               {/* <Button variant="text" color="info" size="small" sx={{ minWidth: 0 }} href="#blog">
@@ -135,11 +135,11 @@ export default function AppAppBar() {
                   </IconButton>
                 </Box>
 
-                <MenuItem href="#features">Features</MenuItem>
-                <MenuItem href="#testimonials">Testimonials</MenuItem>
-                <MenuItem href="#highlights">Highlights</MenuItem>
-                <MenuItem href="#pricing">Pricing</MenuItem>
-                <MenuItem href="#faq">FAQ</MenuItem>
+                <MenuItem href="/#features">Features</MenuItem>
+                <MenuItem href="/#testimonials">Testimonials</MenuItem>
+                <MenuItem href="/#highlights">Highlights</MenuItem>
+                <MenuItem href="/#pricing">Pricing</MenuItem>
+                <MenuItem href="/#faq">FAQ</MenuItem>
                 {/* <MenuItem href="#blog">Blog</MenuItem> */}
                 <Divider sx={{ my: 3 }} />
                 {!isSigned ? (
