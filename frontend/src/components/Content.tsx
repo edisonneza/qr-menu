@@ -37,8 +37,8 @@ export default function Content() {
     <Stack
       sx={{ flexDirection: 'column', alignSelf: 'center', gap: 4, maxWidth: 450 }}
     >
-      <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-        <SitemarkIcon />
+      <Box sx={{ display: { xs: 'none', md: 'flex' }, justifyContent: 'center', mb: { xs: 0, md: 2 } }}>
+        <SitemarkIcon {...{ height: 51, width: 150, mr: 2 }} />
       </Box>
       {items.map((item, index) => (
         <Stack key={index} direction="row" sx={{ gap: 2 }}>
