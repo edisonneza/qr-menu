@@ -16,6 +16,7 @@ import { GoogleIcon, FacebookIcon, SitemarkIcon } from './CustomIcons';
 import { useAuth } from '../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -36,6 +37,7 @@ const Card = styled(MuiCard)(({ theme }) => ({
 }));
 
 export default function SignInCard() {
+  const { t } = useTranslation();
   const [emailError, setEmailError] = React.useState(false);
   const [emailErrorMessage, setEmailErrorMessage] = React.useState('');
   const [passwordError, setPasswordError] = React.useState(false);
@@ -56,7 +58,7 @@ export default function SignInCard() {
   const onSubmit = async (data:any) => {
     if (!validateInputs()) return;
 
-    try { await auth.login(data.email, data.password); nav('/admin/dashboard'); }
+    try { await auth.login(data.email, data.password); nav('/admin'); }
     catch(e){ alert('Login failed'); }
   }
 
@@ -68,7 +70,7 @@ export default function SignInCard() {
 
     if (!email.value || !/\S+@\S+\.\S+/.test(email.value)) {
       setEmailError(true);
-      setEmailErrorMessage('Please enter a valid email address.');
+      setEmailErrorMessage(t('Please enter a valid email address.'));
       isValid = false;
     } else {
       setEmailError(false);
@@ -77,7 +79,7 @@ export default function SignInCard() {
 
     if (!password.value || password.value.length < 5) {
       setPasswordError(true);
-      setPasswordErrorMessage('Password must be at least 5 characters long.');
+      setPasswordErrorMessage(t('Password must be at least 5 characters long.'));
       isValid = false;
     } else {
       setPasswordError(false);
@@ -97,7 +99,7 @@ export default function SignInCard() {
         variant="h4"
         sx={{ width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)' }}
       >
-        Sign in
+        {t('Sign in to your account')}
       </Typography>
       <Box
         component="form"
@@ -124,7 +126,7 @@ export default function SignInCard() {
         </FormControl>
         <FormControl>
           <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-            <FormLabel htmlFor="password">Password</FormLabel>
+            <FormLabel htmlFor="password">{t('Password')}</FormLabel>
             <Link
               component="button"
               type="button"
@@ -132,7 +134,7 @@ export default function SignInCard() {
               variant="body2"
               sx={{ alignSelf: 'baseline' }}
             >
-              Forgot your password?
+              {t('Forgot your password?')}
             </Link>
           </Box>
           <TextField {...register('password')}
@@ -151,35 +153,35 @@ export default function SignInCard() {
         </FormControl>
         <FormControlLabel
           control={<Checkbox value="remember" color="primary" />}
-          label="Remember me"
+          label={t('Remember me')}
         />
         <ForgotPassword open={open} handleClose={handleClose} />
         <Button type="submit" fullWidth variant="contained" onClick={validateInputs}>
-          Sign in
+          {t('Sign in')}
         </Button>
         <Typography sx={{ textAlign: 'center' }}>
-          Don&apos;t have an account?{' '}
+          {t("Don't have an account?")}{' '}
           <span>
             <Link
               onClick={() => nav('/register')}
               variant="body2"
               sx={{ alignSelf: 'center' }}
             >
-              Sign up
+              {t('Sign up')}
             </Link>
           </span>
         </Typography>
       </Box>
-      <Divider>or</Divider>
+      <Divider>{t('or')}</Divider>
       <Button
               onClick={() => nav('/')}
               type="button"
 
               sx={{ alignSelf: 'center' }}
             >
-              Go to Homepage
+              {t('Go to Homepage')}
             </Button>
-      <Divider>or</Divider>
+      <Divider>{t('or')}</Divider>
       <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
         <Button
           fullWidth
@@ -187,7 +189,7 @@ export default function SignInCard() {
           onClick={() => alert('Sign in with Google')}
           startIcon={<GoogleIcon />}
         >
-          Sign in with Google
+          {t('Sign in with Google')}
         </Button>
         <Button
           fullWidth
@@ -195,7 +197,7 @@ export default function SignInCard() {
           onClick={() => alert('Sign in with Facebook')}
           startIcon={<FacebookIcon />}
         >
-          Sign in with Facebook
+          {t('Sign in with Facebook')}
         </Button>
       </Box>
     </Card>

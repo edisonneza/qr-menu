@@ -15,6 +15,8 @@ import ColorModeIconDropdown from '../../theme/ColorModeIconDropdown';
 import Sitemark from './SitemarkIcon';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
+import { useTranslation } from 'react-i18next';
+import LanguageSelect from '../../theme/LanguageSelect';
 
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   display: 'flex',
@@ -36,6 +38,7 @@ export default function AppAppBar() {
   const [open, setOpen] = React.useState(false);
 
   const auth = useAuth();
+  const { t } = useTranslation();
   const [isSigned, setIsSigned] = React.useState(!!auth.token);
 
   React.useEffect(() => {
@@ -66,19 +69,19 @@ export default function AppAppBar() {
             <Sitemark />
             <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
               <Button variant="text" color="info" size="small" href="/#features">
-                Features
+                {t('Features')}
               </Button>
               <Button variant="text" color="info" size="small" href="/#testimonials">
-                Testimonials
+                {t('Testimonials')}
               </Button>
               <Button variant="text" color="info" size="small" href="/#highlights">
-                Highlights
+                {t('Highlights')}
               </Button>
               <Button variant="text" color="info" size="small" href="/#pricing">
-                Pricing
+                {t('Pricing')}
               </Button>
               <Button variant="text" color="info" size="small" sx={{ minWidth: 0 }} href="/#faq">
-                FAQ
+                {t('FAQ')}
               </Button>
               {/* <Button variant="text" color="info" size="small" sx={{ minWidth: 0 }} href="#blog">
                 Blog
@@ -95,17 +98,18 @@ export default function AppAppBar() {
             {!isSigned ? (
               <>
                 <Button color="primary" variant="text" size="small" onClick={() => nav('/login')}>
-                  Sign in
+                  {t('Sign in')}
                 </Button>
                 <Button color="primary" variant="contained" size="small" onClick={() => nav('/register')}>
-                  Sign up
+                  {t('Sign up')}
                 </Button>
               </>
             ) : (
-              <Button color="primary" variant="text" size="small" onClick={() => nav('/admin/dashboard')}>
-                Dashboard
+              <Button color="primary" variant="text" size="small" onClick={() => nav('/admin')}>
+                {t('Dashboard')}
               </Button>
             )}
+            <LanguageSelect size="small" />
             <ColorModeIconDropdown />
           </Box>
           <Box sx={{ display: { xs: 'flex', md: 'none' }, gap: 1 }}>
@@ -157,7 +161,7 @@ export default function AppAppBar() {
                   </>
                 ) : (
                   <MenuItem>
-                    <Button color="primary" variant="contained" fullWidth onClick={() => nav('/admin/dashboard')}>
+                    <Button color="primary" variant="contained" fullWidth onClick={() => nav('/admin')}>
                       Dashboard
                     </Button>
                   </MenuItem>

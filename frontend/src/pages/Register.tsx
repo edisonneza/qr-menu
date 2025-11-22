@@ -67,7 +67,7 @@ export default function Register(props: { disableCustomTheme?: boolean }) {
       if (!res.data.data.token || !res.data.data.user) { throw new Error('Invalid response'); }
       localStorage.setItem('token', res.data.data.token);
       localStorage.setItem('user', JSON.stringify(res.data.data.user));
-      nav('/admin/dashboard');
+      nav('/admin');
     } catch (e: any) {
       if (e.response && e.response.data && e.response.data.error) {
         alert(`Registration failed: ${e.response.data.error}`);
@@ -78,7 +78,7 @@ export default function Register(props: { disableCustomTheme?: boolean }) {
 
   useEffect(() => {
     if (auth.token)
-      return nav('/admin/dashboard');
+      return nav('/admin');
 
   }, [auth.token]);
   // return (
