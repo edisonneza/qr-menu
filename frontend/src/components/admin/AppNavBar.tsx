@@ -11,6 +11,7 @@ import DashboardRoundedIcon from '@mui/icons-material/DashboardRounded';
 import SideMenuMobile from './SideMenuMobile';
 import MenuButton from './MenuButton';
 import ColorModeIconDropdown from '../../theme/ColorModeIconDropdown';
+import { useTranslation } from 'react-i18next';
 
 const Toolbar = styled(MuiToolbar)({
     width: '100%',

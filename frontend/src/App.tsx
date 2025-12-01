@@ -13,28 +13,36 @@ import Settings from './pages/Settings';
 import About from './pages/admin/About';
 import Feedback from './pages/admin/Feedback';
 import TermsAndConditions from './pages/TermsAndConditions';
+import NotificationProvider from './hooks/useNotifications/NotificationsProviders';
+import DialogProvider from './hooks/useDialogs/DialogsProvider';
+import UserList from './pages/admin/users/UserList';
 
 export default function App() {
   return (
     <UIProvider>
-      <Routes>
-        <Route path='/' element={<Home />} />
-        <Route path='/:slug' element={<Home />} />
-        <Route path='/login' element={<Login />} />
-        <Route path='/register' element={<Register />} />
-        <Route path='/termsandconditions' element={<TermsAndConditions />} />
-        <Route path='/menu/:slug' element={<MenuPublic />} />
+      <NotificationProvider>
+        <DialogProvider>
+          <Routes>
+            <Route path='/' element={<Home />} />
+            <Route path='/:slug' element={<Home />} />
+            <Route path='/login' element={<Login />} />
+            <Route path='/register' element={<Register />} />
+            <Route path='/termsandconditions' element={<TermsAndConditions />} />
+            <Route path='/menu/:slug' element={<MenuPublic />} />
 
-        <Route path="/admin" element={<DashboardLayout />}>
-          <Route index element={<Dashboard />} />
-          <Route path="categories" element={<Categories />} />
-          <Route path="products" element={<Products />} />
-          <Route path="orders" element={<Orders />} />
-          <Route path="settings" element={<Settings />} />
-          <Route path="about" element={<About />} />
-          <Route path="feedback" element={<Feedback />} />
-        </Route>
-      </Routes>
+            <Route path="/admin" element={<DashboardLayout />}>
+              <Route index element={<Dashboard />} />
+              <Route path="categories" element={<Categories />} />
+              <Route path="products" element={<Products />} />
+              <Route path="orders" element={<Orders />} />
+              <Route path="settings" element={<Settings />} />
+              <Route path="about" element={<About />} />
+              <Route path="feedback" element={<Feedback />} />
+              <Route path="users" element={<UserList />} />
+            </Route>
+          </Routes>
+        </DialogProvider>
+      </NotificationProvider>
     </UIProvider>
   );
 }
