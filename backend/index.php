@@ -19,7 +19,23 @@ $router->add("GET", "/api/auth/me", function() {
     require __DIR__ . "/api/user.php";
 });
 
+// --------------------------------------------------
+// USERS
+// -------------------------------------------------
+$router->add("GET", "/api/admin/users", fn() => require __DIR__ . "/api/user.php");
 
+$router->add("GET", "/api/admin/users/{id}", function($params) {
+    $_GET["userId"] = $params["id"];
+    require __DIR__ . "/api/user.php";
+});
+$router->add("PUT", "/api/admin/users/{id}", function($params) {
+    $_GET["id"] = $params["id"];
+    require __DIR__ . "/api/user.php";
+});
+$router->add("DELETE", "/api/admin/users/{id}", function($params) {
+    $_GET["id"] = $params["id"];
+    require __DIR__ . "/api/user.php";
+});
 // ------------------------------------------------
 // TENANTS
 // ------------------------------------------------

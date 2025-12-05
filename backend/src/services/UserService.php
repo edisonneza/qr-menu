@@ -23,6 +23,12 @@ class UserService {
         return $row ?: null;
     }
 
+    public function getAllUsersByTenantId(int $tenantId): array {
+        $stmt = $this->pdo->prepare('SELECT * FROM users WHERE tenant_id = ?');
+        $stmt->execute([$tenantId]);
+        return $stmt->fetchAll();
+    }
+
     public function findById(int $id): ?array {
         $stmt = $this->pdo->prepare('SELECT * FROM users WHERE id = ? LIMIT 1');
         $stmt->execute([$id]);
