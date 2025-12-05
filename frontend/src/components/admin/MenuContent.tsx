@@ -20,6 +20,7 @@ const mainListItems = [
   { text: 'Products', icon: <AnalyticsRoundedIcon />, route: '/admin/products' },
   { text: 'Categories', icon: <PeopleRoundedIcon />, route: '/admin/categories' },
   { text: 'Orders', icon: <AssignmentRoundedIcon />, route: '/admin/orders' },
+  { text: 'Users', icon: <AssignmentRoundedIcon />, route: '/admin/users' },
 ];
 
 const secondaryListItems = [

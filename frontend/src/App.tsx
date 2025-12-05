@@ -16,6 +16,9 @@ import TermsAndConditions from './pages/TermsAndConditions';
 import NotificationProvider from './hooks/useNotifications/NotificationsProviders';
 import DialogProvider from './hooks/useDialogs/DialogsProvider';
 import UserList from './pages/admin/users/UserList';
+import UserView from './pages/admin/users/UserView';
+import UserCreate from './pages/admin/users/UserCreate';
+import UserEdit from './pages/admin/users/UsertEdit';
 
 export default function App() {
   return (
@@ -39,6 +42,9 @@ export default function App() {
               <Route path="about" element={<About />} />
               <Route path="feedback" element={<Feedback />} />
               <Route path="users" element={<UserList />} />
+              <Route path="users/:userId" element={<UserView />} />
+              <Route path="users/new" element={<UserCreate />} />
+              <Route path="users/:userId/edit" element={<UserEdit />} />
             </Route>
           </Routes>
         </DialogProvider>
