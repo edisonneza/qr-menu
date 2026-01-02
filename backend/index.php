@@ -46,6 +46,24 @@ $router->add("DELETE", "/api/admin/users/{id}", function($params) {
     $_GET["id"] = $params["id"];
     require __DIR__ . "/api/user.php";
 });
+
+// --------------------------------------------------
+// CLAIMS & PERMISSIONS
+// -------------------------------------------------
+$router->add("GET", "/api/admin/claims", fn() => require __DIR__ . "/api/claims.php");
+$router->add("GET", "/api/auth/me/claims", function() {
+    $_GET["me"] = "true";
+    require __DIR__ . "/api/claims.php";
+});
+$router->add("GET", "/api/admin/users/{id}/claims", function($params) {
+    $_GET["userId"] = $params["id"];
+    require __DIR__ . "/api/claims.php";
+});
+$router->add("PUT", "/api/admin/users/{id}/claims", function($params) {
+    $_GET["userId"] = $params["id"];
+    require __DIR__ . "/api/claims.php";
+});
+
 // ------------------------------------------------
 // TENANTS
 // ------------------------------------------------

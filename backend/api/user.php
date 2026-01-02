@@ -4,6 +4,7 @@
 declare(strict_types=1);
 require_once __DIR__ . '/../src/bootstrap.php';
 require_once __DIR__ . '/../src/helpers.php';
+require_once __DIR__ . '/../src/middleware/claim.php';
 
 use App\Services\DB;
 use App\Services\TenantService;
@@ -25,6 +26,8 @@ if (!$payload) jsonSend(['success' => false, 'error' => 'Invalid token'], 401);
 
 // GET single user by ID
 if ($method === 'GET' && isset($_GET['userId'])) {
+    requireClaim($payload, $pdo, 'users.view');
+    
     $userId = (int)$_GET['userId'];
     
     $user = $userService->findById($userId);
@@ -41,6 +44,8 @@ if ($method === 'GET' && isset($_GET['userId'])) {
 
 // GET all users for tenant
 if ($method === 'GET'){
+    requireClaim($payload, $pdo, 'users.view');
+    
     $users = $userService->getAllUsersByTenantId((int)$payload['tenant_id']);
     foreach ($users as &$user) {
         unset($user['password_hash']);
@@ -51,6 +56,8 @@ if ($method === 'GET'){
 
 // POST - Create new user
 if ($method === 'POST') {
+    requireClaim($payload, $pdo, 'users.create');
+    
     $data = getJsonPayload();
     
     try {
@@ -96,6 +103,8 @@ if ($method === 'POST') {
 
 // PUT - Update user
 if ($method === 'PUT' && isset($_GET['id'])) {
+    requireClaim($payload, $pdo, 'users.edit');
+    
     $userId = (int)$_GET['id'];
     $data = getJsonPayload();
     
@@ -141,6 +150,8 @@ if ($method === 'PUT' && isset($_GET['id'])) {
 
 // DELETE - Delete user
 if ($method === 'DELETE' && isset($_GET['id'])) {
+    requireClaim($payload, $pdo, 'users.delete');
+    
     $userId = (int)$_GET['id'];
     
     try {

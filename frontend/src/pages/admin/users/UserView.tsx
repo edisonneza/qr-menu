@@ -7,22 +7,20 @@ import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
+import Tab from '@mui/material/Tab';
+import Tabs from '@mui/material/Tabs';
 import Typography from '@mui/material/Typography';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useNavigate, useParams } from 'react-router';
 import dayjs from 'dayjs';
-// import {
-//   deleteOne as deleteUser,
-//   getOne as getUser,
-//   type User,
-// } from '../data/users';
 import { useDialogs } from '../../../hooks/useDialogs/useDialogs';
 import useNotifications from '../../../hooks/useNotifications/useNotifications';
 import PageContainer from '../../PageContainer';
 import { User } from '../../../models/User';
 import { deleteUser, getUserById } from '../../../api/user/UserApi';
+import UserPermissions from '../../../components/admin/user/UserPermissions';
 
 export default function UserView() {
   const { userId } = useParams();
@@ -34,6 +32,7 @@ export default function UserView() {
   const [user, setUser] = React.useState<User | null>(null);
   const [isLoading, setIsLoading] = React.useState(true);
   const [error, setError] = React.useState<Error | null>(null);
+  const [activeTab, setActiveTab] = React.useState(0);
 
   const loadData = React.useCallback(async () => {
     setError(null);
@@ -100,6 +99,13 @@ export default function UserView() {
     navigate('/admin/users');
   }, [navigate]);
 
+  const handleTabChange = React.useCallback(
+    (_event: React.SyntheticEvent, newValue: number) => {
+      setActiveTab(newValue);
+    },
+    []
+  );
+
   const renderShow = React.useMemo(() => {
     if (isLoading) {
       return (
@@ -128,100 +134,135 @@ export default function UserView() {
 
     return user ? (
       <Box sx={{ flexGrow: 1, width: '100%' }}>
-        <Grid container spacing={2} sx={{ width: '100%' }}>
-          <Grid size={{ xs: 12, sm: 6 }}>
-            <Paper sx={{ px: 2, py: 1 }}>
-              <Typography variant="overline">Name</Typography>
-              <Typography variant="body1" sx={{ mb: 1 }}>
-                {user.name}
-              </Typography>
-            </Paper>
-          </Grid>
-          <Grid size={{ xs: 12, sm: 6 }}>
-            <Paper sx={{ px: 2, py: 1 }}>
-              <Typography variant="overline">Email</Typography>
-              <Typography variant="body1" sx={{ mb: 1 }}>
-                {user.email}
-              </Typography>
-            </Paper>
-          </Grid>
-          <Grid size={{ xs: 12, sm: 6 }}>
-            <Paper sx={{ px: 2, py: 1 }}>
-              <Typography variant="overline">Phone</Typography>
-              <Typography variant="body1" sx={{ mb: 1 }}>
-                {user.phone || 'N/A'}
-              </Typography>
-            </Paper>
-          </Grid>
-          <Grid size={{ xs: 12, sm: 6 }}>
-            <Paper sx={{ px: 2, py: 1 }}>
-              <Typography variant="overline">Role</Typography>
-              <Typography variant="body1" sx={{ mb: 1, textTransform: 'capitalize' }}>
-                {user.role}
-              </Typography>
-            </Paper>
-          </Grid>
-          <Grid size={{ xs: 12, sm: 6 }}>
-            <Paper sx={{ px: 2, py: 1 }}>
-              <Typography variant="overline">Status</Typography>
-              <Typography variant="body1" sx={{ mb: 1 }}>
-                {user.is_active ? 'Active' : 'Inactive'}
-              </Typography>
-            </Paper>
-          </Grid>
-          <Grid size={{ xs: 12, sm: 6 }}>
-            <Paper sx={{ px: 2, py: 1 }}>
-              <Typography variant="overline">Created At</Typography>
-              <Typography variant="body1" sx={{ mb: 1 }}>
-                {dayjs(user.created_at).format('MMMM D, YYYY')}
-              </Typography>
-            </Paper>
-          </Grid>
-          <Grid size={{ xs: 12, sm: 6 }}>
-            <Paper sx={{ px: 2, py: 1 }}>
-              <Typography variant="overline">Last Login</Typography>
-              <Typography variant="body1" sx={{ mb: 1 }}>
-                {user.last_login_at ? dayjs(user.last_login_at).format('MMMM D, YYYY HH:mm') : 'Never'}
-              </Typography>
-            </Paper>
-          </Grid>
-        </Grid>
-        <Divider sx={{ my: 3 }} />
-        <Stack direction="row" spacing={2} justifyContent="space-between">
-          <Button
-            variant="contained"
-            startIcon={<ArrowBackIcon />}
-            onClick={handleBack}
-          >
-            Back
-          </Button>
-          <Stack direction="row" spacing={2}>
+        {/* Tabs */}
+        <Paper sx={{ mb: 3 }}>
+          <Tabs value={activeTab} onChange={handleTabChange}>
+            <Tab label="Details" />
+            <Tab label="Permissions" />
+          </Tabs>
+        </Paper>
+
+        {/* Tab Content */}
+        {activeTab === 0 && (
+          <>
+            <Grid container spacing={2} sx={{ width: '100%' }}>
+              <Grid size={{ xs: 12, sm: 6 }}>
+                <Paper sx={{ px: 2, py: 1 }}>
+                  <Typography variant="overline">Name</Typography>
+                  <Typography variant="body1" sx={{ mb: 1 }}>
+                    {user.name}
+                  </Typography>
+                </Paper>
+              </Grid>
+              <Grid size={{ xs: 12, sm: 6 }}>
+                <Paper sx={{ px: 2, py: 1 }}>
+                  <Typography variant="overline">Email</Typography>
+                  <Typography variant="body1" sx={{ mb: 1 }}>
+                    {user.email}
+                  </Typography>
+                </Paper>
+              </Grid>
+              <Grid size={{ xs: 12, sm: 6 }}>
+                <Paper sx={{ px: 2, py: 1 }}>
+                  <Typography variant="overline">Phone</Typography>
+                  <Typography variant="body1" sx={{ mb: 1 }}>
+                    {user.phone || 'N/A'}
+                  </Typography>
+                </Paper>
+              </Grid>
+              <Grid size={{ xs: 12, sm: 6 }}>
+                <Paper sx={{ px: 2, py: 1 }}>
+                  <Typography variant="overline">Role</Typography>
+                  <Typography
+                    variant="body1"
+                    sx={{ mb: 1, textTransform: 'capitalize' }}
+                  >
+                    {user.role}
+                  </Typography>
+                </Paper>
+              </Grid>
+              <Grid size={{ xs: 12, sm: 6 }}>
+                <Paper sx={{ px: 2, py: 1 }}>
+                  <Typography variant="overline">Status</Typography>
+                  <Typography variant="body1" sx={{ mb: 1 }}>
+                    {user.is_active ? 'Active' : 'Inactive'}
+                  </Typography>
+                </Paper>
+              </Grid>
+              <Grid size={{ xs: 12, sm: 6 }}>
+                <Paper sx={{ px: 2, py: 1 }}>
+                  <Typography variant="overline">Created At</Typography>
+                  <Typography variant="body1" sx={{ mb: 1 }}>
+                    {dayjs(user.created_at).format('MMMM D, YYYY')}
+                  </Typography>
+                </Paper>
+              </Grid>
+              <Grid size={{ xs: 12, sm: 6 }}>
+                <Paper sx={{ px: 2, py: 1 }}>
+                  <Typography variant="overline">Last Login</Typography>
+                  <Typography variant="body1" sx={{ mb: 1 }}>
+                    {user.last_login_at
+                      ? dayjs(user.last_login_at).format('MMMM D, YYYY HH:mm')
+                      : 'Never'}
+                  </Typography>
+                </Paper>
+              </Grid>
+            </Grid>
+            <Divider sx={{ my: 3 }} />
+          </>
+        )}
+
+        {activeTab === 1 && (
+          <UserPermissions
+            userId={Number(userId)}
+            userName={user.name}
+            userRole={user.role}
+            onUpdate={loadData}
+          />
+        )}
+
+        {/* Action Buttons (show on Details tab only) */}
+        {activeTab === 0 && (
+          <Stack direction="row" spacing={2} justifyContent="space-between">
             <Button
               variant="contained"
-              startIcon={<EditIcon />}
-              onClick={handleUserEdit}
+              startIcon={<ArrowBackIcon />}
+              onClick={handleBack}
             >
-              Edit
+              Back
             </Button>
-            <Button
-              variant="contained"
-              color="error"
-              startIcon={<DeleteIcon />}
-              onClick={handleUserDelete}
-            >
-              Delete
-            </Button>
+            <Stack direction="row" spacing={2}>
+              <Button
+                variant="contained"
+                startIcon={<EditIcon />}
+                onClick={handleUserEdit}
+              >
+                Edit
+              </Button>
+              <Button
+                variant="contained"
+                color="error"
+                startIcon={<DeleteIcon />}
+                onClick={handleUserDelete}
+              >
+                Delete
+              </Button>
+            </Stack>
           </Stack>
-        </Stack>
+        )}
       </Box>
     ) : null;
   }, [
     isLoading,
     error,
     user,
+    activeTab,
+    userId,
+    handleTabChange,
     handleBack,
     handleUserEdit,
     handleUserDelete,
+    loadData,
   ]);
 
   const pageTitle = `User ${userId}`;
