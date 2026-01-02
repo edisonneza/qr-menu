@@ -1,6 +1,39 @@
 CREATE DATABASE IF NOT EXISTS ta_menu CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE ta_menu;
 
+-- Tenants table (for multi-tenant SaaS)
+CREATE TABLE IF NOT EXISTS tenants (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(100) NOT NULL,
+  slug VARCHAR(100) NOT NULL UNIQUE,
+  email VARCHAR(100) NOT NULL UNIQUE,
+  phone VARCHAR(30),
+  whatsapp_number VARCHAR(30),
+  logo_url VARCHAR(255),
+  color_theme VARCHAR(50),
+  plan_id INT DEFAULT 1,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- Users table
+CREATE TABLE IF NOT EXISTS users (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  tenant_id INT NOT NULL,
+  name VARCHAR(100) NOT NULL,
+  email VARCHAR(100) NOT NULL UNIQUE,
+  password_hash VARCHAR(255) NOT NULL,
+  role ENUM('admin', 'manager', 'staff') DEFAULT 'staff',
+  is_active BOOLEAN DEFAULT TRUE,
+  phone VARCHAR(30),
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  last_login_at DATETIME NULL,
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  FOREIGN KEY (tenant_id) REFERENCES tenants(id) ON DELETE CASCADE,
+  INDEX idx_tenant_id (tenant_id),
+  INDEX idx_email (email)
+);
+
 CREATE TABLE IF NOT EXISTS stores (
   id INT AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(100) NOT NULL,

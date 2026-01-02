@@ -12,16 +12,16 @@ import MenuItem from '@mui/material/MenuItem';
 import Select, { SelectChangeEvent, SelectProps } from '@mui/material/Select';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import IconButton from '@mui/material/IconButton';
+import InputAdornment from '@mui/material/InputAdornment';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useNavigate } from 'react-router';
-import dayjs, { Dayjs } from 'dayjs';
 import { User } from '../../../models/User';
 
 export interface UserFormState {
-  values: Partial<Omit<User, 'id'>>;
+  values: Partial<Omit<User, 'id' | 'tenant_id' | 'created_at' | 'updated_at' | 'last_login_at'>>;
   errors: Partial<Record<keyof UserFormState['values'], string>>;
 }
 
@@ -37,6 +37,7 @@ export interface UserFormProps {
   onReset?: (formValues: Partial<UserFormState['values']>) => void;
   submitButtonLabel: string;
   backButtonPath?: string;
+  isEditMode?: boolean;
 }
 
 export default function UserForm(props: UserFormProps) {
@@ -47,6 +48,7 @@ export default function UserForm(props: UserFormProps) {
     onReset,
     submitButtonLabel,
     backButtonPath,
+    isEditMode = false,
   } = props;
 
   const formValues = formState.values;
@@ -55,6 +57,7 @@ export default function UserForm(props: UserFormProps) {
   const navigate = useNavigate();
 
   const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const [showPassword, setShowPassword] = React.useState(false);
 
   const handleSubmit = React.useCallback(
     async (event: React.FormEvent<HTMLFormElement>) => {
@@ -80,32 +83,11 @@ export default function UserForm(props: UserFormProps) {
     [onFieldChange],
   );
 
-  const handleNumberFieldChange = React.useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      onFieldChange(
-        event.target.name as keyof UserFormState['values'],
-        Number(event.target.value),
-      );
-    },
-    [onFieldChange],
-  );
-
   const handleCheckboxFieldChange = React.useCallback(
     (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
       onFieldChange(event.target.name as keyof UserFormState['values'], checked);
     },
     [onFieldChange],
-  );
-
-  const handleDateFieldChange = React.useCallback(
-    (fieldName: keyof UserFormState['values']) => (value: Dayjs | null) => {
-      if (value?.isValid()) {
-        onFieldChange(fieldName, value.toISOString() ?? null);
-      } else if (formValues[fieldName]) {
-        onFieldChange(fieldName, null);
-      }
-    },
-    [formValues, onFieldChange],
   );
 
   const handleSelectFieldChange = React.useCallback(
@@ -125,8 +107,12 @@ export default function UserForm(props: UserFormProps) {
   }, [formValues, onReset]);
 
   const handleBack = React.useCallback(() => {
-    navigate(backButtonPath ?? '/users');
+    navigate(backButtonPath ?? '/admin/users');
   }, [navigate, backButtonPath]);
+
+  const handleTogglePasswordVisibility = () => {
+    setShowPassword((prev) => !prev);
+  };
 
   return (
     <Box
@@ -144,7 +130,8 @@ export default function UserForm(props: UserFormProps) {
               value={formValues.name ?? ''}
               onChange={handleTextFieldChange}
               name="name"
-              label="Name"
+              label="Full Name"
+              required
               error={!!formErrors.name}
               helperText={formErrors.name ?? ' '}
               fullWidth
@@ -152,67 +139,95 @@ export default function UserForm(props: UserFormProps) {
           </Grid>
           <Grid size={{ xs: 12, sm: 6 }} sx={{ display: 'flex' }}>
             <TextField
-              type="number"
+              type="email"
               value={formValues.email ?? ''}
-              onChange={handleNumberFieldChange}
+              onChange={handleTextFieldChange}
               name="email"
               label="Email"
+              required
               error={!!formErrors.email}
               helperText={formErrors.email ?? ' '}
               fullWidth
             />
           </Grid>
+          
+          {/* Password field - only show on create or if user wants to change it */}
           <Grid size={{ xs: 12, sm: 6 }} sx={{ display: 'flex' }}>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DatePicker
-                value={formValues.created_at ? dayjs(formValues.created_at) : null}
-                onChange={handleDateFieldChange('created_at')}
-                name="created_at"
-                label="Created at"
-                slotProps={{
-                  textField: {
-                    error: !!formErrors.created_at,
-                    helperText: formErrors.created_at ?? ' ',
-                    fullWidth: true,
-                  },
-                }}
-              />
-            </LocalizationProvider>
+            <TextField
+              type={showPassword ? 'text' : 'password'}
+              value={formValues.password ?? ''}
+              onChange={handleTextFieldChange}
+              name="password"
+              label={isEditMode ? 'New Password (leave blank to keep current)' : 'Password'}
+              required={!isEditMode}
+              error={!!formErrors.password}
+              helperText={formErrors.password ?? ' '}
+              fullWidth
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleTogglePasswordVisibility}
+                      edge="end"
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+            />
           </Grid>
+
           <Grid size={{ xs: 12, sm: 6 }} sx={{ display: 'flex' }}>
-            <FormControl error={!!formErrors.role} fullWidth>
-              <InputLabel id="user-role-label">Department</InputLabel>
+            <TextField
+              type="tel"
+              value={formValues.phone ?? ''}
+              onChange={handleTextFieldChange}
+              name="phone"
+              label="Phone"
+              error={!!formErrors.phone}
+              helperText={formErrors.phone ?? ' '}
+              placeholder="+1234567890"
+              fullWidth
+            />
+          </Grid>
+
+          <Grid size={{ xs: 12, sm: 6 }} sx={{ display: 'flex' }}>
+            <FormControl error={!!formErrors.role} fullWidth required>
+              <InputLabel id="user-role-label">Role</InputLabel>
               <Select
                 value={formValues.role ?? ''}
                 onChange={handleSelectFieldChange as SelectProps['onChange']}
                 labelId="user-role-label"
                 name="role"
-                label="Department"
+                label="Role"
                 defaultValue=""
                 fullWidth
               >
-                <MenuItem value="Market">Market</MenuItem>
-                <MenuItem value="Finance">Finance</MenuItem>
-                <MenuItem value="Development">Development</MenuItem>
+                <MenuItem value="admin">Admin</MenuItem>
+                <MenuItem value="manager">Manager</MenuItem>
+                <MenuItem value="staff">Staff</MenuItem>
               </Select>
               <FormHelperText>{formErrors.role ?? ' '}</FormHelperText>
             </FormControl>
           </Grid>
-          <Grid size={{ xs: 12, sm: 6 }} sx={{ display: 'flex' }}>
+
+          <Grid size={{ xs: 12, sm: 6 }} sx={{ display: 'flex', alignItems: 'center' }}>
             <FormControl>
               <FormControlLabel
-                name="isFullTime"
+                name="is_active"
                 control={
                   <Checkbox
                     size="large"
-                    checked={formValues.isActive ?? false}
+                    checked={formValues.is_active ?? true}
                     onChange={handleCheckboxFieldChange}
                   />
                 }
-                label="Full-time"
+                label="Active"
               />
-              <FormHelperText error={!!formErrors.isActive}>
-                {formErrors.isActive ?? ' '}
+              <FormHelperText error={!!formErrors.is_active}>
+                {formErrors.is_active ?? ' '}
               </FormHelperText>
             </FormControl>
           </Grid>
@@ -230,7 +245,7 @@ export default function UserForm(props: UserFormProps) {
           type="submit"
           variant="contained"
           size="large"
-          loading={isSubmitting}
+          disabled={isSubmitting}
         >
           {submitButtonLabel}
         </Button>

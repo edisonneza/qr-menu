@@ -139,7 +139,7 @@ export default function UserView() {
           </Grid>
           <Grid size={{ xs: 12, sm: 6 }}>
             <Paper sx={{ px: 2, py: 1 }}>
-              <Typography variant="overline">Age</Typography>
+              <Typography variant="overline">Email</Typography>
               <Typography variant="body1" sx={{ mb: 1 }}>
                 {user.email}
               </Typography>
@@ -147,7 +147,31 @@ export default function UserView() {
           </Grid>
           <Grid size={{ xs: 12, sm: 6 }}>
             <Paper sx={{ px: 2, py: 1 }}>
-              <Typography variant="overline">Join date</Typography>
+              <Typography variant="overline">Phone</Typography>
+              <Typography variant="body1" sx={{ mb: 1 }}>
+                {user.phone || 'N/A'}
+              </Typography>
+            </Paper>
+          </Grid>
+          <Grid size={{ xs: 12, sm: 6 }}>
+            <Paper sx={{ px: 2, py: 1 }}>
+              <Typography variant="overline">Role</Typography>
+              <Typography variant="body1" sx={{ mb: 1, textTransform: 'capitalize' }}>
+                {user.role}
+              </Typography>
+            </Paper>
+          </Grid>
+          <Grid size={{ xs: 12, sm: 6 }}>
+            <Paper sx={{ px: 2, py: 1 }}>
+              <Typography variant="overline">Status</Typography>
+              <Typography variant="body1" sx={{ mb: 1 }}>
+                {user.is_active ? 'Active' : 'Inactive'}
+              </Typography>
+            </Paper>
+          </Grid>
+          <Grid size={{ xs: 12, sm: 6 }}>
+            <Paper sx={{ px: 2, py: 1 }}>
+              <Typography variant="overline">Created At</Typography>
               <Typography variant="body1" sx={{ mb: 1 }}>
                 {dayjs(user.created_at).format('MMMM D, YYYY')}
               </Typography>
@@ -155,17 +179,9 @@ export default function UserView() {
           </Grid>
           <Grid size={{ xs: 12, sm: 6 }}>
             <Paper sx={{ px: 2, py: 1 }}>
-              <Typography variant="overline">Department</Typography>
+              <Typography variant="overline">Last Login</Typography>
               <Typography variant="body1" sx={{ mb: 1 }}>
-                {user.role}
-              </Typography>
-            </Paper>
-          </Grid>
-          <Grid size={{ xs: 12, sm: 6 }}>
-            <Paper sx={{ px: 2, py: 1 }}>
-              <Typography variant="overline">Full-time</Typography>
-              <Typography variant="body1" sx={{ mb: 1 }}>
-                {user.isActive ? 'Yes' : 'No'}
+                {user.last_login_at ? dayjs(user.last_login_at).format('MMMM D, YYYY HH:mm') : 'Never'}
               </Typography>
             </Paper>
           </Grid>

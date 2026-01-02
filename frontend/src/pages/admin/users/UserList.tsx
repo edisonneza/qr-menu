@@ -221,28 +221,35 @@ export default function UserList() {
 
   const columns = React.useMemo<GridColDef[]>(
     () => [
-      { field: 'id', headerName: 'ID' },
-      { field: 'name', headerName: 'Name', width: 140 },
-      { field: 'age', headerName: 'Age', type: 'number' },
-      {
-        field: 'joinDate',
-        headerName: 'Join date',
-        type: 'date',
-        valueGetter: (value) => value && new Date(value),
-        width: 140,
-      },
+      { field: 'id', headerName: 'ID', width: 70 },
+      { field: 'name', headerName: 'Name', width: 180, flex: 1 },
+      { field: 'email', headerName: 'Email', width: 200, flex: 1 },
+      { field: 'phone', headerName: 'Phone', width: 140 },
       {
         field: 'role',
-        headerName: 'Department',
+        headerName: 'Role',
         type: 'singleSelect',
-        valueOptions: ['Market', 'Finance', 'Development'],
-        width: 160,
+        valueOptions: ['admin', 'manager', 'staff'],
+        valueFormatter: (value) => value ? value.charAt(0).toUpperCase() + value.slice(1) : '',
+        width: 120,
       },
-      { field: 'isFullTime', headerName: 'Full-time', type: 'boolean' },
+      { 
+        field: 'is_active', 
+        headerName: 'Active', 
+        type: 'boolean',
+        width: 100,
+      },
+      {
+        field: 'created_at',
+        headerName: 'Created',
+        type: 'date',
+        valueGetter: (value) => value && new Date(value),
+        width: 120,
+      },
       {
         field: 'actions',
         type: 'actions',
-        flex: 1,
+        width: 100,
         align: 'right',
         getActions: ({ row }) => [
           <GridActionsCellItem

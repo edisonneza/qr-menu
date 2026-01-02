@@ -11,8 +11,12 @@ import { getUserById, updateUser, createUser } from '../../../api/user/UserApi';
 import PageContainer from '../../PageContainer';
 
 const INITIAL_FORM_VALUES: Partial<UserFormState['values']> = {
+  name: '',
   email: '',
-  isActive: true,
+  password: '',
+  phone: '',
+  role: 'staff',
+  is_active: true,
 };
 
 export default function UserCreateEdit() {
@@ -83,7 +87,7 @@ export default function UserCreateEdit() {
   const handleFormFieldChange = React.useCallback(
     (name: keyof UserFormState['values'], value: FormFieldValue) => {
       const validateField = async (values: Partial<UserFormState['values']>) => {
-        const { issues } = validateUser(values);
+        const { issues } = validateUser(values, !isEditMode);
         setFormErrors({
           ...formErrors,
           [name]: issues?.find((issue) => issue.path?.[0] === name)?.message,
@@ -95,7 +99,7 @@ export default function UserCreateEdit() {
       setFormValues(newFormValues);
       validateField(newFormValues);
     },
-    [formValues, formErrors, setFormErrors, setFormValues],
+    [formValues, formErrors, isEditMode, setFormErrors, setFormValues],
   );
 
   const handleFormReset = React.useCallback(() => {
@@ -103,7 +107,7 @@ export default function UserCreateEdit() {
   }, [isEditMode, user, setFormValues]);
 
   const handleFormSubmit = React.useCallback(async () => {
-    const { issues } = validateUser(formValues);
+    const { issues } = validateUser(formValues, !isEditMode);
     if (issues && issues.length > 0) {
       setFormErrors(
         Object.fromEntries(issues.map((issue) => [issue.path?.[0], issue.message])),
@@ -116,28 +120,21 @@ export default function UserCreateEdit() {
       if (isEditMode) {
         // Update existing user
         const updatedData = await updateUser(Number(userId), formValues as UserFormState);
-        setUser(updatedData.data);
+        setUser(updatedData);
         notifications.show('User updated successfully.', {
           severity: 'success',
           autoHideDuration: 3000,
         });
+        navigate(`/admin/users/${userId}`);
       } else {
         // Create new user
-        const response = await createUser(formValues as UserFormState);
-        if (!response.success) {
-          notifications.show(response.message, {
-            severity: 'error',
-            autoHideDuration: 3000,
-          });
-          return;
-        }
+        const newUser = await createUser(formValues as UserFormState);
         notifications.show('User created successfully.', {
           severity: 'success',
           autoHideDuration: 3000,
         });
+        navigate(`/admin/users/${newUser.id}`);
       }
-
-      navigate('/admin/users');
     } catch (submitError) {
       notifications.show(
         `Failed to ${isEditMode ? 'update' : 'create'} user. Reason: ${(submitError as Error).message}`,
@@ -194,6 +191,7 @@ export default function UserCreateEdit() {
         onReset={handleFormReset}
         submitButtonLabel={isEditMode ? 'Save' : 'Create'}
         backButtonPath={isEditMode ? `/admin/users/${userId}` : '/admin/users'}
+        isEditMode={isEditMode}
       />
     );
   }, [

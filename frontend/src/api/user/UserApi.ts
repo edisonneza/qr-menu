@@ -35,7 +35,7 @@ const getUsers = async ({
 
 const getUserById = async (id: number) => {
   const r = await api.get(`/admin/users/${id}`);
-  return r.data;
+  return r.data.data;
 };
 
 const deleteUser = async (id: number) => {
@@ -46,14 +46,14 @@ const deleteUser = async (id: number) => {
 const updateUser = async (
   id: number,
   data: UserFormState
-): Promise<Response<User>> => {
-  const r = (await api.put(`/admin/users/${id}`, data)) as Response<User>;
-  return r;
+): Promise<User> => {
+  const r = await api.put(`/admin/users/${id}`, data);
+  return r.data.data;
 };
 
-const createUser = async (data: UserFormState): Promise<Response<User>> => {
-  const r = (await api.post("/admin/users", data)) as Response<User>;
-  return r;
+const createUser = async (data: UserFormState): Promise<User> => {
+  const r = await api.post("/admin/users", data);
+  return r.data.data;
 };
 
 export { getUsers, getUserById, deleteUser, updateUser, createUser };

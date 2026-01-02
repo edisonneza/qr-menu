@@ -32,6 +32,7 @@ $router->add("GET", "/api/auth/me", function() {
 // USERS
 // -------------------------------------------------
 $router->add("GET", "/api/admin/users", fn() => require __DIR__ . "/api/user.php");
+$router->add("POST", "/api/admin/users", fn() => require __DIR__ . "/api/user.php");
 
 $router->add("GET", "/api/admin/users/{id}", function($params) {
     $_GET["userId"] = $params["id"];
