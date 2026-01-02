@@ -64,6 +64,31 @@ $router->add("PUT", "/api/admin/users/{id}/claims", function($params) {
     require __DIR__ . "/api/claims.php";
 });
 
+// --------------------------------------------------
+// ROLES
+// -------------------------------------------------
+$router->add("GET", "/api/admin/roles", fn() => require __DIR__ . "/api/roles.php");
+// More specific routes first
+$router->add("GET", "/api/admin/roles/{role}/users", function($params) {
+    $_GET["role"] = $params["role"];
+    $_GET["users"] = "true";
+    require __DIR__ . "/api/roles.php";
+});
+$router->add("PUT", "/api/admin/roles/{role}/claims", function($params) {
+    $_GET["role"] = $params["role"];
+    require __DIR__ . "/api/roles.php";
+});
+$router->add("PUT", "/api/admin/roles/{role}/metadata", function($params) {
+    $_GET["role"] = $params["role"];
+    $_GET["metadata"] = "true";
+    require __DIR__ . "/api/roles.php";
+});
+// Less specific route last
+$router->add("GET", "/api/admin/roles/{role}", function($params) {
+    $_GET["role"] = $params["role"];
+    require __DIR__ . "/api/roles.php";
+});
+
 // ------------------------------------------------
 // TENANTS
 // ------------------------------------------------

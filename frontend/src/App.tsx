@@ -18,6 +18,10 @@ import DialogProvider from './hooks/useDialogs/DialogsProvider';
 import UserList from './pages/admin/users/UserList';
 import UserView from './pages/admin/users/UserView';
 import UserCreateEdit from './pages/admin/users/UserCreateEdit';
+import RoleList from './pages/admin/roles/RoleList';
+import RoleView from './pages/admin/roles/RoleView';
+import RoleEdit from './pages/admin/roles/RoleEdit';
+import RoleEditDetails from './pages/admin/roles/RoleEditDetails';
 import { useTokenExpirationCheck } from './hooks/useTokenExpirationCheck';
 
 export default function App() {
@@ -49,6 +53,12 @@ export default function App() {
               <Route path="users/:userId" element={<UserView />} />
               <Route path="users/new" element={<UserCreateEdit />} />
               <Route path="users/:userId/edit" element={<UserCreateEdit />} />
+              
+              {/* Role Management Routes */}
+              <Route path="roles" element={<RoleList />} />
+              <Route path="roles/:roleId" element={<RoleView />} />
+              <Route path="roles/:roleId/edit" element={<RoleEdit />} />
+              <Route path="roles/:roleId/edit-details" element={<RoleEditDetails />} />
             </Route>
           </Routes>
         </DialogProvider>

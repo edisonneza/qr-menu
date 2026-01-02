@@ -8,6 +8,7 @@ import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
 import AnalyticsRoundedIcon from '@mui/icons-material/AnalyticsRounded';
 import PeopleRoundedIcon from '@mui/icons-material/PeopleRounded';
 import AssignmentRoundedIcon from '@mui/icons-material/AssignmentRounded';
+import AdminPanelSettingsRoundedIcon from '@mui/icons-material/AdminPanelSettingsRounded';
 import SettingsRoundedIcon from '@mui/icons-material/SettingsRounded';
 import InfoRoundedIcon from '@mui/icons-material/InfoRounded';
 import HelpRoundedIcon from '@mui/icons-material/HelpRounded';
@@ -21,6 +22,7 @@ const mainListItems = [
   { text: 'Categories', icon: <PeopleRoundedIcon />, route: '/admin/categories' },
   { text: 'Orders', icon: <AssignmentRoundedIcon />, route: '/admin/orders' },
   { text: 'Users', icon: <AssignmentRoundedIcon />, route: '/admin/users' },
+  { text: 'Roles', icon: <AdminPanelSettingsRoundedIcon />, route: '/admin/roles' },
 ];
 
 const secondaryListItems = [
