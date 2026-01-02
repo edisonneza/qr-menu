@@ -7,7 +7,10 @@ require_once __DIR__ . '/../src/helpers.php';
 use App\Services\DB;
 use App\Services\TenantService;
 use App\Services\UserService;
+use App\Services\RefreshTokenService;
 use App\Auth\JwtAuth;
+
+global $config;
 
 $payload = getJsonPayload();
 
@@ -29,11 +32,35 @@ try {
     // create subscription default handled by DB triggers or separate insertion; for brevity skip
     $pdo->commit();
 
-    // create token
+    // Create tokens
     $jwt = new JwtAuth($config['jwt_secret'], $config['jwt_issuer'] ?? '');
-    $token = $jwt->createToken(['user_id' => $userId, 'tenant_id' => $tenantId, 'email' => $payload['email']]);
+    
+    // Create access token (short-lived: 1 hour)
+    $accessToken = $jwt->createToken([
+        'user_id' => $userId, 
+        'tenant_id' => $tenantId, 
+        'name' => $payload['tenant_name'],
+        'email' => $payload['email']
+    ], 3600); // 1 hour
+    
+    // Create refresh token (long-lived: 30 days)
+    $refreshToken = $jwt->createRefreshToken($userId);
+    $refreshTokenSvc = new RefreshTokenService($pdo);
+    $refreshTokenSvc->storeRefreshToken($userId, $refreshToken, 30); // 30 days
 
-    jsonSend(['success' => true, 'data' => ['token' => $token, 'user' => ['id' => $userId, 'name' => $payload['tenant_name'], 'tenant_id' => $tenantId, 'email' => $payload['email']]]]);
+    jsonSend([
+        'success' => true, 
+        'data' => [
+            'access_token' => $accessToken,
+            'refresh_token' => $refreshToken,
+            'user' => [
+                'id' => $userId, 
+                'name' => $payload['tenant_name'], 
+                'tenant_id' => $tenantId, 
+                'email' => $payload['email']
+            ]
+        ]
+    ]);
 } catch (InvalidArgumentException $e) {
     if (isset($pdo) && $pdo->inTransaction()) $pdo->rollBack();
     jsonSend(['success' => false, 'error' => $e->getMessage()], 400);

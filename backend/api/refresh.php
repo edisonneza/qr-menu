@@ -1,5 +1,5 @@
 <?php
-// backend/api/login.php
+// backend/api/refresh.php
 declare(strict_types=1);
 require_once __DIR__ . '/../src/bootstrap.php';
 require_once __DIR__ . '/../src/helpers.php';
@@ -13,47 +13,58 @@ use App\Auth\JwtAuth;
 global $config;
 
 $data = getJsonPayload();
-try {
-    requireFields($data, ['email', 'password']);
-    $pdo = App\Services\DB::getPDO($config);
-    $userSvc = new UserService($pdo);
-    $user = $userSvc->findByEmail($data['email']);
-    if (!$user) jsonSend(['success' => false, 'error' => 'Invalid credentials'], 401);
-    if (!password_verify($data['password'], $user['password_hash'])) jsonSend(['success' => false, 'error' => 'Invalid credentials'], 401);
 
+try {
+    requireFields($data, ['refresh_token']);
+    
+    $pdo = App\Services\DB::getPDO($config);
+    $refreshTokenSvc = new RefreshTokenService($pdo);
+    
+    // Validate the refresh token and get user ID
+    $userId = $refreshTokenSvc->validateRefreshToken($data['refresh_token']);
+    
+    if (!$userId) {
+        jsonSend(['success' => false, 'error' => 'Invalid or expired refresh token'], 401);
+    }
+
+    // Get user details
+    $userSvc = new UserService($pdo);
+    $user = $userSvc->findById($userId);
+    
+    if (!$user) {
+        jsonSend(['success' => false, 'error' => 'User not found'], 404);
+    }
+
+    // Get tenant details
     $tenantSvc = new TenantService($pdo);
     $tenant = $tenantSvc->getById((int)$user['tenant_id']);
-    
+
+    // Create new access token
     $jwt = new JwtAuth($config['jwt_secret'], $config['jwt_issuer'] ?? '');
-    
-    // Create access token (short-lived: 1 hour)
-    $accessToken = $jwt->createToken([
+    $newAccessToken = $jwt->createToken([
         'user_id' => $user['id'], 
         'name' => $user['name'], 
         'tenant_id' => $user['tenant_id'], 
         'email' => $user['email']
     ], 3600); // 1 hour
-    
-    // Create refresh token (long-lived: 30 days)
-    $refreshToken = $jwt->createRefreshToken($user['id']);
-    $refreshTokenSvc = new RefreshTokenService($pdo);
-    $refreshTokenSvc->storeRefreshToken($user['id'], $refreshToken, 30); // 30 days
 
-    // Update last login timestamp
-    $stmt = $pdo->prepare('UPDATE users SET last_login_at = NOW() WHERE id = ?');
-    $stmt->execute([$user['id']]);
+    // Optionally: Create a new refresh token and revoke the old one (token rotation)
+    $newRefreshToken = $jwt->createRefreshToken($userId);
+    $refreshTokenSvc->storeRefreshToken($userId, $newRefreshToken, 30); // 30 days
+    $refreshTokenSvc->revokeToken($data['refresh_token']); // Revoke old token
 
     unset($user['password_hash']);
     
     jsonSend([
         'success' => true, 
         'data' => [
-            'access_token' => $accessToken,
-            'refresh_token' => $refreshToken,
-            'user' => $user, 
+            'access_token' => $newAccessToken,
+            'refresh_token' => $newRefreshToken,
+            'user' => $user,
             'tenant' => $tenant
         ]
     ]);
+    
 } catch (InvalidArgumentException $e) {
     jsonSend(['success' => false, 'error' => $e->getMessage()], 400);
 } catch (Exception $e) {

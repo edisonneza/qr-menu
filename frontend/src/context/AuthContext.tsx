@@ -3,6 +3,7 @@ import api from '../api/axios';
 import { User } from '../models/User';
 interface AuthContextType {
   token: string | null;
+  refreshToken: string | null;
   user: User | null;
   login: (email: string, password: string) => Promise<any>;
   logout: () => void;
@@ -13,6 +14,7 @@ export const AuthContext = createContext<AuthContextType>({} as AuthContextType)
 
 export const AuthProvider: React.FC<{ children: any }> = ({ children }) => {
   const [token, setToken] = useState<string | null>(() => localStorage.getItem('token'));
+  const [refreshToken, setRefreshToken] = useState<string | null>(() => localStorage.getItem('refresh_token'));
   const [user, setUser] = useState<User | null>(() => {
     const storedUser = localStorage.getItem('user');
     return storedUser ? JSON.parse(storedUser) : null;
@@ -23,7 +25,8 @@ export const AuthProvider: React.FC<{ children: any }> = ({ children }) => {
     try {
       const payload = JSON.parse(atob(token.split('.')[1]));
       const expirationTime = payload.exp * 1000; // Convert to milliseconds
-      return Date.now() >= expirationTime;
+      // Add a 30-second buffer to refresh before actual expiration
+      return Date.now() >= (expirationTime - 30000);
     } catch (error) {
       return true; // If we can't decode, consider it expired
     }
@@ -32,8 +35,10 @@ export const AuthProvider: React.FC<{ children: any }> = ({ children }) => {
   // Handle token expiration
   const handleTokenExpired = useCallback(() => {
     setToken(null);
+    setRefreshToken(null);
     setUser(null);
     localStorage.removeItem('token');
+    localStorage.removeItem('refresh_token');
     localStorage.removeItem('user');
     
     // Redirect to login page
@@ -44,33 +49,53 @@ export const AuthProvider: React.FC<{ children: any }> = ({ children }) => {
   useEffect(() => {
     if (token) {
       if (isTokenExpired(token)) {
-        handleTokenExpired();
+        // Token is expired, but axios interceptor will handle refresh
+        // Only clear if there's no refresh token
+        if (!refreshToken) {
+          handleTokenExpired();
+        }
       } else {
         api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
       }
     } else {
       delete api.defaults.headers.common['Authorization'];
     }
-  }, [token, isTokenExpired, handleTokenExpired]);
+  }, [token, refreshToken, isTokenExpired, handleTokenExpired]);
 
   const login = async (email: string, password: string) => {
-    const res = await api.post('/login.php', { email, password });
-    const { token, user } = res.data.data;
-    setToken(token);
+    const res = await api.post('/auth/login', { email, password });
+    const { access_token, refresh_token, user } = res.data.data;
+    
+    setToken(access_token);
+    setRefreshToken(refresh_token);
     setUser(user);
-    localStorage.setItem('token', token);
+    
+    localStorage.setItem('token', access_token);
+    localStorage.setItem('refresh_token', refresh_token);
     localStorage.setItem('user', JSON.stringify(user));
+    
     return res.data;
   };
 
-  const logout = useCallback(() => {
+  const logout = useCallback(async () => {
+    // Call backend to revoke refresh token
+    if (refreshToken) {
+      try {
+        await api.post('/auth/logout', { refresh_token: refreshToken });
+      } catch (error) {
+        console.error('Logout error:', error);
+      }
+    }
+    
     setToken(null);
+    setRefreshToken(null);
     setUser(null);
     localStorage.removeItem('token');
+    localStorage.removeItem('refresh_token');
     localStorage.removeItem('user');
-  }, []);
+  }, [refreshToken]);
   return (
-    <AuthContext.Provider value={{ token, user, login, logout, handleTokenExpired }}>
+    <AuthContext.Provider value={{ token, refreshToken, user, login, logout, handleTokenExpired }}>
       {children}
     </AuthContext.Provider>
   );

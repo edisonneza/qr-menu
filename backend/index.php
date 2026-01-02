@@ -9,11 +9,19 @@ $router = new Router();
 // AUTH ENDPOINTS
 // ------------------------------------------------
 $router->add("POST", "/api/auth/login", function() {
-    require __DIR__ . "/api/auth.php";
+    require __DIR__ . "/api/login.php";
 });
 
 $router->add("POST", "/api/auth/register", function() {
     require __DIR__ . "/api/register.php";
+});
+
+$router->add("POST", "/api/auth/refresh", function() {
+    require __DIR__ . "/api/refresh.php";
+});
+
+$router->add("POST", "/api/auth/logout", function() {
+    require __DIR__ . "/api/logout.php";
 });
 
 $router->add("GET", "/api/auth/me", function() {
