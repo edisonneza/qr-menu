@@ -54,7 +54,7 @@ export default function UserView() {
   }, [loadData]);
 
   const handleUserEdit = React.useCallback(() => {
-    navigate(`/users/${userId}/edit`);
+    navigate(`/admin/users/${userId}/edit`);
   }, [navigate, userId]);
 
   const handleUserDelete = React.useCallback(async () => {
@@ -77,7 +77,7 @@ export default function UserView() {
       try {
         await deleteUser(Number(userId));
 
-        navigate('/users');
+        navigate('/admin/users');
 
         notifications.show('User deleted successfully.', {
           severity: 'success',
@@ -97,7 +97,7 @@ export default function UserView() {
   }, [user, dialogs, userId, navigate, notifications]);
 
   const handleBack = React.useCallback(() => {
-    navigate('/users');
+    navigate('/admin/users');
   }, [navigate]);
 
   const renderShow = React.useMemo(() => {
@@ -214,7 +214,7 @@ export default function UserView() {
     <PageContainer
       title={pageTitle}
       breadcrumbs={[
-        { title: 'Users', path: '/users' },
+        { title: 'Users', path: '/admin/users' },
         { title: pageTitle },
       ]}
     >

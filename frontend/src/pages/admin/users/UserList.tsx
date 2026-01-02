@@ -159,18 +159,18 @@ export default function UserList() {
 
   const handleRowClick = React.useCallback<GridEventListener<'rowClick'>>(
     ({ row }) => {
-      navigate(`/users/${row.id}`);
+      navigate(`/admin/users/${row.id}`);
     },
     [navigate],
   );
 
   const handleCreateClick = React.useCallback(() => {
-    navigate('/users/new');
+    navigate('/admin/users/new');
   }, [navigate]);
 
   const handleRowEdit = React.useCallback(
     (user: User) => () => {
-      navigate(`/users/${user.id}/edit`);
+      navigate(`/admin/users/${user.id}/edit`);
     },
     [navigate],
   );

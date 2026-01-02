@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . "/src/router.php";
+require_once __DIR__ . "/src/bootstrap.php";
 
 $router = new Router();
 

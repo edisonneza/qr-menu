@@ -17,10 +17,12 @@ import NotificationProvider from './hooks/useNotifications/NotificationsProvider
 import DialogProvider from './hooks/useDialogs/DialogsProvider';
 import UserList from './pages/admin/users/UserList';
 import UserView from './pages/admin/users/UserView';
-import UserCreate from './pages/admin/users/UserCreate';
-import UserEdit from './pages/admin/users/UsertEdit';
+import UserCreateEdit from './pages/admin/users/UserCreateEdit';
+import { useTokenExpirationCheck } from './hooks/useTokenExpirationCheck';
 
 export default function App() {
+  // Check for token expiration every minute
+  useTokenExpirationCheck(60000);
   return (
     <UIProvider>
       <NotificationProvider>
@@ -41,10 +43,12 @@ export default function App() {
               <Route path="settings" element={<Settings />} />
               <Route path="about" element={<About />} />
               <Route path="feedback" element={<Feedback />} />
+              
+              {/* User Management Routes */}
               <Route path="users" element={<UserList />} />
               <Route path="users/:userId" element={<UserView />} />
-              <Route path="users/new" element={<UserCreate />} />
-              <Route path="users/:userId/edit" element={<UserEdit />} />
+              <Route path="users/new" element={<UserCreateEdit />} />
+              <Route path="users/:userId/edit" element={<UserCreateEdit />} />
             </Route>
           </Routes>
         </DialogProvider>

@@ -10,6 +10,8 @@ use App\Services\TenantService;
 use App\Auth\JwtAuth;
 use App\Services\UserService;
 
+global $config;
+
 $pdo = App\Services\DB::getPDO($config);
 $userService = new UserService($pdo);
 

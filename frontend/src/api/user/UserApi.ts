@@ -17,7 +17,6 @@ const getUsers = async ({
   sortModel: GridSortModel;
   filterModel: GridFilterModel;
 }): Promise<{ items: User[]; itemCount: number }> => {
-  debugger;
   const token = localStorage.getItem("token");
 
   if (token) api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
@@ -31,7 +30,7 @@ const getUsers = async ({
     },
   });
 
-  return r.data;
+  return r.data.data;
 };
 
 const getUserById = async (id: number) => {
