@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE || 'https://localhost/github/qr-menu/backend/api',
+  baseURL: import.meta.env.VITE_API_BASE || 'http://192.168.100.148/github/qr-menu/backend/api',
   headers: { 'Content-Type': 'application/json' }
 });
 
@@ -64,7 +64,7 @@ api.interceptors.response.use(
       try {
         // Attempt to refresh the token
         const response = await axios.post(
-          `${import.meta.env.VITE_API_BASE || 'https://localhost/github/qr-menu/backend/api'}/auth/refresh`,
+          `${import.meta.env.VITE_API_BASE || 'http://192.168.100.148/github/qr-menu/backend/api'}/auth/refresh`,
           { refresh_token: refreshToken }
         );
 
